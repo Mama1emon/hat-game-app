@@ -1,4 +1,4 @@
-package dev.mama1emon.hat.ui.theme
+package dev.mama1emon.hat.ds.theme
 
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font

@@ -51,11 +51,13 @@ android {
 }
 
 dependencies {
-    implementation(Deps.kotlin)
-    implementation(Deps.activityKtx)
     implementation(Deps.activityCompose)
-    implementation(Deps.materialCompose)
+    implementation(Deps.activityKtx)
     implementation(Deps.foundationCompose)
     implementation(Deps.hilt)
     kapt(Deps.hiltCompiler)
+    implementation(Deps.hiltNavigation)
+    implementation(Deps.kotlin)
+    implementation(Deps.materialCompose)
+    implementation(Deps.navigation)
 }

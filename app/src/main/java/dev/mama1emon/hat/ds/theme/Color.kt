@@ -1,4 +1,4 @@
-package dev.mama1emon.hat.ui.theme
+package dev.mama1emon.hat.ds.theme
 
 import androidx.compose.ui.graphics.Color
 

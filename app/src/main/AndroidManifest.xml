@@ -12,7 +12,7 @@
         android:theme="@style/Theme.Hat"
         tools:targetApi="33">
         <activity
-            android:name=".MainActivity"
+            android:name=".HatActivity"
             android:exported="true"
             android:theme="@style/Theme.Hat">
             <intent-filter>

@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Hat</string>
+    <string name="hat">ШЛЯПА</string>
+
+    <string name="play">Играть</string>
+    <string name="rules_of_the_game">Правила игры</string>
 </resources>

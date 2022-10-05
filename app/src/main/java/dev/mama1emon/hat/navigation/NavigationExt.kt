@@ -5,6 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import dev.mama1emon.hat.greeting.presentation.ui.GreetingScreen
 
 const val HAT_GRAPH_NAME = "hat"
 
@@ -18,6 +19,7 @@ fun NavGraphBuilder.hatGraph() {
         startDestination = Screens.Greeting.route
     ) {
         composable(route = Screens.Greeting.route) {
+            GreetingScreen()
         }
     }
 }

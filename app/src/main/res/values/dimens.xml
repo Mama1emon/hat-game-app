@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="padding18">18dp</dimen>
+    <dimen name="padding20">20dp</dimen>
+    <dimen name="padding36">36dp</dimen>
+    <dimen name="padding65">65dp</dimen>
+
+    <dimen name="size1">1dp</dimen>
+    <dimen name="size54">54dp</dimen>
+    <dimen name="size220">220dp</dimen>
+    <dimen name="size270">270dp</dimen>
+
+    <dimen name="radius16">16dp</dimen>
+</resources>

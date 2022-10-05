@@ -59,6 +59,20 @@ object HatTypography {
         lineHeight = TextUnit(value = 16f, type = TextUnitType.Sp)
     )
 
+    val Regular24 = TextStyle(
+        fontFamily = ManropeFontFamily,
+        fontWeight = FontWeight.Normal,
+        fontSize = 24.sp,
+        lineHeight = TextUnit(value = 16f, type = TextUnitType.Sp)
+    )
+
+    val Regular42 = TextStyle(
+        fontFamily = ManropeFontFamily,
+        fontWeight = FontWeight.Normal,
+        fontSize = 42.sp,
+        lineHeight = TextUnit(value = 16f, type = TextUnitType.Sp)
+    )
+
     val Medium18 = TextStyle(
         fontFamily = ManropeFontFamily,
         fontWeight = FontWeight.Medium,
@@ -73,10 +87,10 @@ object HatTypography {
         lineHeight = TextUnit(value = 16f, type = TextUnitType.Sp)
     )
 
-    val Regular42 = TextStyle(
-        fontFamily = ManropeFontFamily,
+    val Lobster64 = TextStyle(
+        fontFamily = FontFamily(Font(R.font.lobster_regular, FontWeight.Normal)),
         fontWeight = FontWeight.Normal,
-        fontSize = 42.sp,
+        fontSize = 64.sp,
         lineHeight = TextUnit(value = 16f, type = TextUnitType.Sp)
     )
 }

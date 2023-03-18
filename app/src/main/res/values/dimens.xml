@@ -1,14 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="padding2">2dp</dimen>
+    <dimen name="padding5">5dp</dimen>
+    <dimen name="padding6">6dp</dimen>
+    <dimen name="padding10">10dp</dimen>
+    <dimen name="padding12">12dp</dimen>
+    <dimen name="padding14">14dp</dimen>
+    <dimen name="padding16">16dp</dimen>
     <dimen name="padding18">18dp</dimen>
     <dimen name="padding20">20dp</dimen>
+    <dimen name="padding24">24dp</dimen>
     <dimen name="padding36">36dp</dimen>
     <dimen name="padding65">65dp</dimen>
 
     <dimen name="size1">1dp</dimen>
+    <dimen name="size24">24dp</dimen>
     <dimen name="size54">54dp</dimen>
+    <dimen name="size146">146dp</dimen>
     <dimen name="size220">220dp</dimen>
     <dimen name="size270">270dp</dimen>
 
+    <dimen name="radius8">8dp</dimen>
     <dimen name="radius16">16dp</dimen>
 </resources>

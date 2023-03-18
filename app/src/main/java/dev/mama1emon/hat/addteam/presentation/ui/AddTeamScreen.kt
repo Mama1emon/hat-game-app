@@ -17,6 +17,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import dev.mama1emon.hat.R
 import dev.mama1emon.hat.addteam.domain.models.Team
+import dev.mama1emon.hat.addteam.presentation.states.AddTeamStateHolder
 import dev.mama1emon.hat.ds.components.AppBar
 import dev.mama1emon.hat.ds.components.CardAction
 import dev.mama1emon.hat.ds.components.CardActionItem
@@ -24,7 +25,34 @@ import dev.mama1emon.hat.ds.components.LargeButton
 import dev.mama1emon.hat.ds.theme.*
 
 @Composable
-fun AddTeamScreen() {
+internal fun AddTeamScreen(stateHolder: AddTeamStateHolder) {
+    when (stateHolder) {
+        is AddTeamStateHolder.Empty -> {
+            EmptyAddTeamScreen(
+                onBackButtonClick = stateHolder.actions.onBackButtonClick,
+                onAddTeamButtonClick = stateHolder.actions.onAddTeamButtonClick,
+                onEnterWordsButtonClick = stateHolder.actions.onEnterWordsButtonClick,
+            )
+        }
+        is AddTeamStateHolder.NotYet -> {
+            NotYetAddTeamScreen(
+                firstTeam = stateHolder.team,
+                onBackButtonClick = stateHolder.actions.onBackButtonClick,
+                onAddTeamButtonClick = stateHolder.actions.onAddTeamButtonClick,
+                onRemoveButtonClick = stateHolder.actions.onRemoveButtonClick,
+                onEnterWordsButtonClick = stateHolder.actions.onEnterWordsButtonClick,
+            )
+        }
+        is AddTeamStateHolder.Ready -> {
+            ReadyAddTeamScreen(
+                teams = stateHolder.teams,
+                onBackButtonClick = stateHolder.actions.onBackButtonClick,
+                onAddTeamButtonClick = stateHolder.actions.onAddTeamButtonClick,
+                onRemoveButtonClick = stateHolder.actions.onRemoveButtonClick,
+                onEnterWordsButtonClick = stateHolder.actions.onEnterWordsButtonClick,
+            )
+        }
+    }
 }
 
 @Composable

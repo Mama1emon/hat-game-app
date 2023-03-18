@@ -16,4 +16,12 @@ val BlackEel = Color(0xFF49423D)
 val BlueZodiac = Color(0xFF181D47)
 
 val GoldenLinearGradient = listOf(GoldenBrown, GoldenOrange)
+val LightInDarkRadialGradient = listOf(
+    QuillTip,
+    Color(0xFF2D2C56),
+    Color(0xFF27254C),
+    Color(0xFF1F1E3F),
+    Color(0xFF1B1A39),
+    LostInSadness
+)
 

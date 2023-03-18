@@ -1,6 +1,5 @@
 package dev.mama1emon.hat.ds.components
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -15,7 +14,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import dev.mama1emon.hat.R
 import dev.mama1emon.hat.ds.theme.BlueZodiac
 import dev.mama1emon.hat.ds.theme.CitrusZest
@@ -27,9 +25,14 @@ enum class CardAction {
 }
 
 @Composable
-fun CardActionItem(@StringRes textId: Int, cardAction: CardAction, onClick: () -> Unit) {
+fun CardActionItem(
+    text: String,
+    cardAction: CardAction,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .background(
                 color = BlueZodiac,
@@ -43,7 +46,7 @@ fun CardActionItem(@StringRes textId: Int, cardAction: CardAction, onClick: () -
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = stringResource(id = textId),
+            text = text,
             modifier = Modifier.padding(vertical = dimensionResource(id = R.dimen.padding6)),
             color = White,
             maxLines = 1,

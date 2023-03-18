@@ -38,9 +38,14 @@ fun OutlinedButton(onClick: () -> Unit, modifier: Modifier, text: String, style:
 }
 
 @Composable
-fun LargeButton(@StringRes textId: Int, enabled: Boolean, onClick: () -> Unit) {
+fun LargeButton(
+    @StringRes textId: Int,
+    enabled: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .clickable(enabled = enabled, onClick = onClick)
             .fillMaxWidth()
             .background(

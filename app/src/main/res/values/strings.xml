@@ -4,4 +4,8 @@
 
     <string name="play">Играть</string>
     <string name="rules_of_the_game">Правила игры</string>
+    <string name="prepare_to_game">Подготовка к игре</string>
+    <string name="add_team">Добавить команду</string>
+    <string name="is_not_greather_then_four">Не более 4 команд</string>
+    <string name="enter_words">Ввести слова</string>
 </resources>

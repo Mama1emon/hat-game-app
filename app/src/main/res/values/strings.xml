@@ -8,4 +8,9 @@
     <string name="add_team">Добавить команду</string>
     <string name="is_not_greather_then_four">Не более 4 команд</string>
     <string name="enter_words">Ввести слова</string>
+    <string name="name">Название</string>
+    <string name="team">Команда</string>
+    <string name="player_with_number">Игрок %s</string>
+    <string name="back">Назад</string>
+    <string name="ready">Готово</string>
 </resources>

@@ -1,6 +1,5 @@
 package dev.mama1emon.hat.ds.components
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicTextField
@@ -13,7 +12,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -27,9 +25,9 @@ private const val PADDING_BETWEEN_CURSOR_AND_TEXT = 1.6
 
 @Composable
 fun TitleInputField(
-    @StringRes titleId: Int,
+    title: String,
     text: String,
-    @StringRes hintId: Int,
+    hint: String,
     onTextChanged: (String) -> Unit,
     onDone: KeyboardActionScope.() -> Unit
 ) {
@@ -39,7 +37,7 @@ fun TitleInputField(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = stringResource(id = titleId),
+            text = title,
             modifier = Modifier.padding(vertical = dimensionResource(id = R.dimen.padding10)),
             color = White,
             maxLines = 1,
@@ -48,7 +46,7 @@ fun TitleInputField(
 
         EditableTextField(
             text = text,
-            hintId = hintId,
+            hint = hint,
             onTextChanged = onTextChanged,
             onDone = onDone
         )
@@ -58,7 +56,7 @@ fun TitleInputField(
 @Composable
 fun EditableTextField(
     text: String,
-    @StringRes hintId: Int,
+    hint: String,
     onTextChanged: (String) -> Unit,
     onDone: KeyboardActionScope.() -> Unit
 ) {
@@ -80,7 +78,7 @@ fun EditableTextField(
             Box {
                 if (text.isBlank()) {
                     Text(
-                        text = stringResource(id = hintId),
+                        text = hint,
                         modifier = Modifier.padding(start = dimensionResource(id = R.dimen.padding2)),
                         color = BattleshipGrey,
                         maxLines = 1,

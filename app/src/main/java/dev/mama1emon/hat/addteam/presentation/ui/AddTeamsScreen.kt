@@ -25,17 +25,17 @@ import dev.mama1emon.hat.ds.components.LargeButton
 import dev.mama1emon.hat.ds.theme.*
 
 @Composable
-internal fun AddTeamScreen(stateHolder: AddTeamStateHolder) {
+internal fun AddTeamsScreen(stateHolder: AddTeamStateHolder) {
     when (stateHolder) {
         is AddTeamStateHolder.Empty -> {
-            EmptyAddTeamScreen(
+            EmptyAddTeamsScreen(
                 onBackButtonClick = stateHolder.actions.onBackButtonClick,
                 onAddTeamButtonClick = stateHolder.actions.onAddTeamButtonClick,
                 onEnterWordsButtonClick = stateHolder.actions.onEnterWordsButtonClick,
             )
         }
         is AddTeamStateHolder.NotYet -> {
-            NotYetAddTeamScreen(
+            NotYetAddTeamsScreen(
                 firstTeam = stateHolder.team,
                 onBackButtonClick = stateHolder.actions.onBackButtonClick,
                 onAddTeamButtonClick = stateHolder.actions.onAddTeamButtonClick,
@@ -44,7 +44,7 @@ internal fun AddTeamScreen(stateHolder: AddTeamStateHolder) {
             )
         }
         is AddTeamStateHolder.Ready -> {
-            ReadyAddTeamScreen(
+            ReadyAddTeamsScreen(
                 teams = stateHolder.teams,
                 onBackButtonClick = stateHolder.actions.onBackButtonClick,
                 onAddTeamButtonClick = stateHolder.actions.onAddTeamButtonClick,
@@ -53,10 +53,14 @@ internal fun AddTeamScreen(stateHolder: AddTeamStateHolder) {
             )
         }
     }
+
+    if (stateHolder is AddTeamStateHolder.AvailableChangeTeamsList) {
+        AddTeamAlert(model = stateHolder.addTeamAlertModel)
+    }
 }
 
 @Composable
-private fun EmptyAddTeamScreen(
+private fun EmptyAddTeamsScreen(
     onBackButtonClick: () -> Unit,
     onAddTeamButtonClick: () -> Unit,
     onEnterWordsButtonClick: () -> Unit
@@ -95,7 +99,7 @@ private fun EmptyAddTeamScreen(
 }
 
 @Composable
-private fun NotYetAddTeamScreen(
+private fun NotYetAddTeamsScreen(
     firstTeam: Team,
     onBackButtonClick: () -> Unit,
     onAddTeamButtonClick: () -> Unit,
@@ -133,7 +137,7 @@ private fun NotYetAddTeamScreen(
 }
 
 @Composable
-private fun ReadyAddTeamScreen(
+private fun ReadyAddTeamsScreen(
     teams: List<Team>,
     onBackButtonClick: () -> Unit,
     onAddTeamButtonClick: () -> Unit,

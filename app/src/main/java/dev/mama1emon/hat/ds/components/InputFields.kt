@@ -8,12 +8,15 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.unit.ExperimentalUnitApi
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import dev.mama1emon.hat.R
 import dev.mama1emon.hat.ds.theme.BattleshipGrey
@@ -29,16 +32,16 @@ fun TitleInputField(
     text: String,
     hint: String,
     onTextChanged: (String) -> Unit,
-    onDone: KeyboardActionScope.() -> Unit
+    onDone: KeyboardActionScope.() -> Unit,
+    isError: Boolean = false,
+    error: String? = null
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
             text = title,
-            modifier = Modifier.padding(vertical = dimensionResource(id = R.dimen.padding10)),
             color = White,
             maxLines = 1,
             style = HatTypography.Regular16
@@ -48,17 +51,22 @@ fun TitleInputField(
             text = text,
             hint = hint,
             onTextChanged = onTextChanged,
-            onDone = onDone
+            onDone = onDone,
+            isError = isError,
+            error = error
         )
     }
 }
 
+@OptIn(ExperimentalUnitApi::class)
 @Composable
 fun EditableTextField(
     text: String,
     hint: String,
     onTextChanged: (String) -> Unit,
-    onDone: KeyboardActionScope.() -> Unit
+    onDone: KeyboardActionScope.() -> Unit,
+    isError: Boolean = false,
+    error: String? = null
 ) {
     BasicTextField(
         value = text,
@@ -72,7 +80,7 @@ fun EditableTextField(
         keyboardActions = KeyboardActions(onDone = onDone),
         singleLine = true,
         maxLines = 1,
-        cursorBrush = SolidColor(CitrusZest)
+        cursorBrush = if (isError) SolidColor(Color.Red) else SolidColor(CitrusZest)
     ) { innerTextField ->
         Column(verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding2))) {
             Box {
@@ -92,7 +100,16 @@ fun EditableTextField(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(PADDING_BETWEEN_CURSOR_AND_TEXT.dp)
-                    .background(CitrusZest)
+                    .background(if (isError) SolidColor(Color.Red) else SolidColor(CitrusZest))
+            )
+
+            Text(
+                text = error ?: "",
+                modifier = Modifier.padding(start = dimensionResource(id = R.dimen.padding2)),
+                color = if (isError) Color.Red else Color.Transparent,
+                letterSpacing = TextUnit(1f, TextUnitType.Sp),
+                maxLines = 1,
+                style = HatTypography.Regular10
             )
         }
     }

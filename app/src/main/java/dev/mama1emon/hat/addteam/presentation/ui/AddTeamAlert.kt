@@ -27,7 +27,7 @@ import dev.mama1emon.hat.ds.theme.*
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-internal fun AddTeamAlert(model: AddTeamStateHolder.AddTeamAlertModel) {
+internal fun AddTeamAlert(model: AddTeamStateHolder.ShowAlertAvailability.AddTeamAlertModel) {
     Box(
         modifier = Modifier
             .padding(horizontal = dimensionResource(id = R.dimen.padding32))
@@ -68,7 +68,9 @@ internal fun AddTeamAlert(model: AddTeamStateHolder.AddTeamAlertModel) {
                     text = model.team.name,
                     hint = stringResource(id = R.string.name),
                     onTextChanged = model.onTeamNameChanged,
-                    onDone = { focusManager.moveFocus(FocusDirection.Down) }
+                    onDone = { focusManager.moveFocus(FocusDirection.Down) },
+                    isError = model.team.hasError,
+                    error = model.team.errorResId?.let { stringResource(it) }
                 )
 
                 val keyboardManager = LocalSoftwareKeyboardController.current
@@ -84,7 +86,9 @@ internal fun AddTeamAlert(model: AddTeamStateHolder.AddTeamAlertModel) {
                             if (index == model.players.lastIndex) {
                                 keyboardManager?.hide()
                             }
-                        }
+                        },
+                        isError = player.hasError,
+                        error = player.errorResId?.let { stringResource(it) }
                     )
                 }
 

@@ -18,43 +18,45 @@ import androidx.compose.ui.res.stringResource
 import dev.mama1emon.hat.R
 import dev.mama1emon.hat.addteam.domain.models.Team
 import dev.mama1emon.hat.addteam.presentation.states.AddTeamStateHolder
+import dev.mama1emon.hat.addteam.presentation.states.AddTeamStateHolder.ShowAlertAvailability
 import dev.mama1emon.hat.ds.components.AppBar
 import dev.mama1emon.hat.ds.components.CardAction
 import dev.mama1emon.hat.ds.components.CardActionItem
 import dev.mama1emon.hat.ds.components.LargeButton
 import dev.mama1emon.hat.ds.theme.*
+import java.util.*
 
 @Composable
 internal fun AddTeamsScreen(stateHolder: AddTeamStateHolder) {
     when (stateHolder) {
         is AddTeamStateHolder.Empty -> {
             EmptyAddTeamsScreen(
-                onBackButtonClick = stateHolder.actions.onBackButtonClick,
-                onAddTeamButtonClick = stateHolder.actions.onAddTeamButtonClick,
-                onEnterWordsButtonClick = stateHolder.actions.onEnterWordsButtonClick,
+                onBackButtonClick = stateHolder.navigationActions.onBackButtonClick,
+                onAddTeamButtonClick = stateHolder.onAddTeamButtonClick,
+                onEnterWordsButtonClick = stateHolder.navigationActions.onEnterWordsButtonClick,
             )
         }
         is AddTeamStateHolder.NotYet -> {
             NotYetAddTeamsScreen(
-                firstTeam = stateHolder.team,
-                onBackButtonClick = stateHolder.actions.onBackButtonClick,
-                onAddTeamButtonClick = stateHolder.actions.onAddTeamButtonClick,
-                onRemoveButtonClick = stateHolder.actions.onRemoveButtonClick,
-                onEnterWordsButtonClick = stateHolder.actions.onEnterWordsButtonClick,
+                enterWordsButtonEnabled = stateHolder.enterWordsButtonEnabled,
+                teams = stateHolder.teams,
+                onBackButtonClick = stateHolder.navigationActions.onBackButtonClick,
+                onAddTeamButtonClick = stateHolder.onAddTeamButtonClick,
+                onRemoveButtonClick = stateHolder.onRemoveButtonClick,
+                onEnterWordsButtonClick = stateHolder.navigationActions.onEnterWordsButtonClick,
             )
         }
         is AddTeamStateHolder.Ready -> {
             ReadyAddTeamsScreen(
                 teams = stateHolder.teams,
-                onBackButtonClick = stateHolder.actions.onBackButtonClick,
-                onAddTeamButtonClick = stateHolder.actions.onAddTeamButtonClick,
-                onRemoveButtonClick = stateHolder.actions.onRemoveButtonClick,
-                onEnterWordsButtonClick = stateHolder.actions.onEnterWordsButtonClick,
+                onBackButtonClick = stateHolder.navigationActions.onBackButtonClick,
+                onRemoveButtonClick = stateHolder.onRemoveButtonClick,
+                onEnterWordsButtonClick = stateHolder.navigationActions.onEnterWordsButtonClick,
             )
         }
     }
 
-    if (stateHolder is AddTeamStateHolder.AvailableChangeTeamsList) {
+    if (stateHolder is ShowAlertAvailability && stateHolder.isAddTeamAlertDrawn) {
         AddTeamAlert(model = stateHolder.addTeamAlertModel)
     }
 }
@@ -100,10 +102,11 @@ private fun EmptyAddTeamsScreen(
 
 @Composable
 private fun NotYetAddTeamsScreen(
-    firstTeam: Team,
+    enterWordsButtonEnabled: Boolean,
+    teams: List<Team>,
     onBackButtonClick: () -> Unit,
     onAddTeamButtonClick: () -> Unit,
-    onRemoveButtonClick: (Int) -> Unit,
+    onRemoveButtonClick: (UUID) -> Unit,
     onEnterWordsButtonClick: () -> Unit
 ) {
     Box(
@@ -116,17 +119,20 @@ private fun NotYetAddTeamsScreen(
             Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.padding24)))
             AddTeamButton(onClick = onAddTeamButtonClick)
             Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.padding12)))
-            CardActionItem(
-                text = firstTeam.name,
-                cardAction = CardAction.Remove,
-                onClick = { onRemoveButtonClick(firstTeam.id) },
-                modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.padding16))
-            )
+            teams.forEach { team ->
+                CardActionItem(
+                    text = team.name,
+                    cardAction = CardAction.Remove,
+                    onClick = { onRemoveButtonClick(team.id) },
+                    modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.padding16))
+                )
+                Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.padding8)))
+            }
         }
 
         LargeButton(
             textId = R.string.enter_words,
-            enabled = false,
+            enabled = enterWordsButtonEnabled,
             onClick = onEnterWordsButtonClick,
             modifier = Modifier
                 .align(Alignment.BottomCenter)
@@ -140,8 +146,7 @@ private fun NotYetAddTeamsScreen(
 private fun ReadyAddTeamsScreen(
     teams: List<Team>,
     onBackButtonClick: () -> Unit,
-    onAddTeamButtonClick: () -> Unit,
-    onRemoveButtonClick: (Int) -> Unit,
+    onRemoveButtonClick: (UUID) -> Unit,
     onEnterWordsButtonClick: () -> Unit
 ) {
     Box(
@@ -152,7 +157,7 @@ private fun ReadyAddTeamsScreen(
         Column(modifier = Modifier.align(Alignment.TopCenter)) {
             AppBar(titleId = R.string.prepare_to_game, onClick = onBackButtonClick)
             Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.padding24)))
-            AddTeamButton(onClick = onAddTeamButtonClick)
+            TeamsReadyBanner()
             Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.padding12)))
             teams.forEach { team ->
                 CardActionItem(
@@ -220,5 +225,44 @@ private fun AddTeamButton(onClick: () -> Unit) {
             contentDescription = null,
             tint = CitrusZest
         )
+    }
+}
+
+@Composable
+private fun TeamsReadyBanner() {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .heightIn(dimensionResource(id = R.dimen.size68))
+            .background(SpanishRoast),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Box(
+            modifier = Modifier
+                .width(dimensionResource(id = R.dimen.size6))
+                .heightIn(dimensionResource(id = R.dimen.size68))
+                .background(CitrusZest)
+        )
+        Spacer(modifier = Modifier.width(dimensionResource(id = R.dimen.padding36)))
+        Icon(
+            painter = painterResource(id = R.drawable.ic_28_ready),
+            contentDescription = null,
+            tint = CitrusZest
+        )
+        Spacer(modifier = Modifier.width(dimensionResource(id = R.dimen.padding16)))
+        Column(verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding2))) {
+            Text(
+                text = stringResource(R.string.teams_ready),
+                color = White,
+                maxLines = 1,
+                style = HatTypography.Regular12
+            )
+            Text(
+                text = stringResource(R.string.enter_words_left),
+                color = White,
+                maxLines = 1,
+                style = HatTypography.Regular12
+            )
+        }
     }
 }

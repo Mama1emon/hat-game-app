@@ -13,4 +13,11 @@
     <string name="player_with_number">Игрок %s</string>
     <string name="back">Назад</string>
     <string name="ready">Готово</string>
+    <string name="empty_player_name">Пустое имя игрока</string>
+    <string name="player_name_is_not_available">Имя уже занято</string>
+    <string name="empty_team_name">Пустое название команды</string>
+    <string name="team_name_is_not_available">Название уже занято</string>
+    <string name="is_not_greather_than_ten_characters">Не более 10 символов</string>
+    <string name="teams_ready">Команды готовы!</string>
+    <string name="enter_words_left">Осталось ввести слова</string>
 </resources>

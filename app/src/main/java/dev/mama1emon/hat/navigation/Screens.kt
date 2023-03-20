@@ -5,4 +5,6 @@ import androidx.navigation.NamedNavArgument
 sealed class Screens(val route: String, val args: List<NamedNavArgument> = listOf()) {
 
     object Greeting : Screens(route = "greeting")
+
+    object AddTeam : Screens(route = "add_team")
 }

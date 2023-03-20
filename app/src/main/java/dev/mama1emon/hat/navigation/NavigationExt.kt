@@ -1,10 +1,13 @@
 package dev.mama1emon.hat.navigation
 
 import androidx.compose.runtime.compositionLocalOf
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import dev.mama1emon.hat.addteam.presentation.ui.AddTeamsScreen
+import dev.mama1emon.hat.addteam.presentation.viewmodels.AddTeamsViewModel
 import dev.mama1emon.hat.greeting.presentation.ui.GreetingScreen
 
 const val HAT_GRAPH_NAME = "hat"
@@ -20,6 +23,13 @@ fun NavGraphBuilder.hatGraph() {
     ) {
         composable(route = Screens.Greeting.route) {
             GreetingScreen()
+        }
+
+        composable(route = Screens.AddTeam.route) {
+            val viewModel = hiltViewModel<AddTeamsViewModel>().apply {
+                navHostController = LocalNavController.current
+            }
+            AddTeamsScreen(stateHolder = viewModel.uiState)
         }
     }
 }

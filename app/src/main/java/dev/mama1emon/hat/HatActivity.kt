@@ -4,6 +4,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.compositionLocalOf
+import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
@@ -18,9 +21,14 @@ class HatActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val navController = rememberNavController()
+            val activityViewModelStoreOwner = requireNotNull(
+                value = LocalViewModelStoreOwner.current,
+                lazyMessage = { "ActivityViewModelStoreOwner is null" }
+            )
 
             CompositionLocalProvider(
-                LocalNavController provides navController
+                LocalNavController provides navController,
+                LocalActivityViewModelStoreOwner provides activityViewModelStoreOwner
             ) {
                 HatTheme {
                     NavHost(
@@ -33,4 +41,9 @@ class HatActivity : ComponentActivity() {
             }
         }
     }
+}
+
+/** Провайдер для [ViewModelStoreOwner] Activity */
+val LocalActivityViewModelStoreOwner = compositionLocalOf<ViewModelStoreOwner>() {
+    error("LocalActivityStoreOwnerProvider value not specified")
 }

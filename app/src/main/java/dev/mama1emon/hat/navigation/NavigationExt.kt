@@ -6,6 +6,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import dev.mama1emon.hat.LocalActivityViewModelStoreOwner
 import dev.mama1emon.hat.addteam.presentation.ui.AddTeamsScreen
 import dev.mama1emon.hat.addteam.presentation.viewmodels.AddTeamsViewModel
 import dev.mama1emon.hat.greeting.presentation.ui.GreetingScreen
@@ -17,18 +18,18 @@ val LocalNavController = compositionLocalOf<NavHostController>() {
 }
 
 fun NavGraphBuilder.hatGraph() {
-    navigation(
-        route = HAT_GRAPH_NAME,
-        startDestination = Screens.Greeting.route
-    ) {
+    navigation(route = HAT_GRAPH_NAME, startDestination = Screens.Greeting.route) {
         composable(route = Screens.Greeting.route) {
             GreetingScreen()
         }
 
         composable(route = Screens.AddTeam.route) {
-            val viewModel = hiltViewModel<AddTeamsViewModel>().apply {
+            val viewModel = hiltViewModel<AddTeamsViewModel>(
+                viewModelStoreOwner = LocalActivityViewModelStoreOwner.current
+            ).apply {
                 navHostController = LocalNavController.current
             }
+
             AddTeamsScreen(stateHolder = viewModel.uiState)
         }
     }

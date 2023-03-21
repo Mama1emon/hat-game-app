@@ -13,7 +13,10 @@
     <dimen name="padding24">24dp</dimen>
     <dimen name="padding32">32dp</dimen>
     <dimen name="padding36">36dp</dimen>
+    <dimen name="padding40">40dp</dimen>
+    <dimen name="padding46">46dp</dimen>
     <dimen name="padding65">65dp</dimen>
+    <dimen name="padding70">70dp</dimen>
 
     <dimen name="size1">1dp</dimen>
     <dimen name="size6">6dp</dimen>

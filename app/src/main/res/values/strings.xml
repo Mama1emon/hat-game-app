@@ -20,4 +20,7 @@
     <string name="is_not_greather_than_ten_characters">Не более 10 символов</string>
     <string name="teams_ready">Команды готовы!</string>
     <string name="enter_words_left">Осталось ввести слова</string>
+    <string name="attention">Внимание</string>
+    <string name="word">Слово</string>
+    <string name="words_successfully_added">Слова успешно добавлены!</string>
 </resources>

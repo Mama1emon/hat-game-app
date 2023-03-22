@@ -15,6 +15,7 @@
     <dimen name="padding36">36dp</dimen>
     <dimen name="padding40">40dp</dimen>
     <dimen name="padding46">46dp</dimen>
+    <dimen name="padding48">48dp</dimen>
     <dimen name="padding65">65dp</dimen>
     <dimen name="padding70">70dp</dimen>
 
@@ -22,10 +23,15 @@
     <dimen name="size6">6dp</dimen>
     <dimen name="size24">24dp</dimen>
     <dimen name="size26">26dp</dimen>
+    <dimen name="size36">36dp</dimen>
+    <dimen name="size40">40dp</dimen>
+    <dimen name="size48">48dp</dimen>
     <dimen name="size54">54dp</dimen>
+    <dimen name="size56">56dp</dimen>
     <dimen name="size68">68dp</dimen>
     <dimen name="size146">146dp</dimen>
     <dimen name="size174">174dp</dimen>
+    <dimen name="size180">180dp</dimen>
     <dimen name="size220">220dp</dimen>
     <dimen name="size270">270dp</dimen>
 

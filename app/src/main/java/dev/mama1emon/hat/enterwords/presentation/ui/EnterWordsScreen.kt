@@ -31,76 +31,92 @@ import dev.mama1emon.hat.ds.components.CardActionItem
 import dev.mama1emon.hat.ds.theme.*
 import dev.mama1emon.hat.enterwords.presentation.models.EnterWordFieldModel
 import dev.mama1emon.hat.enterwords.presentation.models.Word
+import dev.mama1emon.hat.enterwords.presentation.states.EnterWordsStateHolder
 
 private const val MIN_PROGRESS = 0.009f
+private const val MAX_PROGRESS = 1f
 
 /**
  * @author Andrew Khokhlov on 22/03/2023
  */
 @Composable
-fun EnterWordsScreen(
-    onBackButtonClick: () -> Unit,
-    onReadyClick: () -> Unit
-) {
+fun EnterWordsScreen(stateHolder: EnterWordsStateHolder) {
     Scaffold(
-        topBar = { AppBar(titleId = R.string.prepare_to_game, onClick = onBackButtonClick) },
-        floatingActionButton = { ReadyFloatButton(onClick = onReadyClick) },
+        topBar = {
+            AppBar(titleId = R.string.prepare_to_game, onClick = stateHolder.onBackButtonClick)
+        },
+        floatingActionButton = {
+            if (stateHolder is EnterWordsStateHolder.Ready) {
+                ReadyFloatButton(onClick = stateHolder.onReadyButtonClick)
+            }
+        },
         floatingActionButtonPosition = FabPosition.End
     ) {
-//        ReadyEnterWordsScreen(
-//            name = name,
-//            words = words,
-//            onRemoveWordClick = onRemoveWordClick,
-//            modifier = Modifier
-//                .padding(it)
-//                .fillMaxSize()
-//                .background(LostInSadness)
-//        )
+        when (stateHolder) {
+            is EnterWordsStateHolder.Empty -> {
+                EmptyEnterWordsScreen(
+                    state = stateHolder,
+                    modifier = Modifier
+                        .padding(it)
+                        .fillMaxSize()
+                        .background(LostInSadness)
+                )
+            }
+            is EnterWordsStateHolder.NotYet -> {
+                NotYetEnterWordsScreen(
+                    state = stateHolder, modifier = Modifier
+                        .padding(it)
+                        .fillMaxSize()
+                        .background(LostInSadness)
+                )
+            }
+            is EnterWordsStateHolder.Ready -> {
+                ReadyEnterWordsScreen(
+                    state = stateHolder, modifier = Modifier
+                        .padding(it)
+                        .fillMaxSize()
+                        .background(LostInSadness)
+                )
+            }
+        }
     }
 }
 
 @Composable
 private fun EmptyEnterWordsScreen(
-    name: String,
-    enterWordFieldModel: EnterWordFieldModel,
+    state: EnterWordsStateHolder.Empty,
     modifier: Modifier = Modifier
 ) {
     Column(modifier) {
-        ProgressIndicator(progress = MIN_PROGRESS, name = name)
-        InputField(model = enterWordFieldModel)
+        ProgressIndicator(progress = MIN_PROGRESS, name = state.playerName)
+        InputField(model = state.fieldModel)
     }
 }
 
 @Composable
 private fun NotYetEnterWordsScreen(
-    progress: Float,
-    name: String,
-    enterWordFieldModel: EnterWordFieldModel,
-    words: List<Word>,
-    onRemoveWordClick: (Int) -> Unit,
+    state: EnterWordsStateHolder.NotYet,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(modifier) {
-        item { ProgressIndicator(progress = progress, name = name) }
-        item { InputField(model = enterWordFieldModel) }
-        itemsIndexed(words) { index, word ->
-            AddedWordItem(word, index, words, onRemoveWordClick)
+        item { ProgressIndicator(progress = state.progress, name = state.playerName) }
+        item { InputField(model = state.fieldModel) }
+        itemsIndexed(state.words) { index, word ->
+            AddedWordItem(word, index, state.words, state.onRemoveWordButtonClick)
         }
     }
 }
 
 @Composable
 private fun ReadyEnterWordsScreen(
-    name: String,
-    words: List<Word>,
-    onRemoveWordClick: (Int) -> Unit,
+    state: EnterWordsStateHolder.Ready,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(modifier = modifier) {
-        item { ProgressIndicator(progress = 1f, name = name) }
+        item { ProgressIndicator(progress = MAX_PROGRESS, name = state.playerName) }
         item { PlayerReadyBanner() }
-        itemsIndexed(words) { index, word ->
-            AddedWordItem(word, index, words, onRemoveWordClick)
+        itemsIndexed(state.words) { index, word ->
+            AddedWordItem(word, index, state.words, state.onRemoveWordButtonClick)
         }
     }
 }

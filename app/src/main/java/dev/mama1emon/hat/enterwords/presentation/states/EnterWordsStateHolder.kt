@@ -9,7 +9,6 @@ import dev.mama1emon.hat.enterwords.presentation.models.Word
 sealed interface EnterWordsStateHolder {
 
     val playerName: String
-    val onBackButtonClick: () -> Unit
 
     sealed interface EnterWordAvailability {
         val fieldModel: EnterWordFieldModel
@@ -29,13 +28,11 @@ sealed interface EnterWordsStateHolder {
 
     data class Empty(
         override val playerName: String,
-        override val onBackButtonClick: () -> Unit,
         override val fieldModel: EnterWordFieldModel
     ) : EnterWordsStateHolder, EnterWordAvailability
 
     data class NotYet(
         override val playerName: String,
-        override val onBackButtonClick: () -> Unit,
         override val fieldModel: EnterWordFieldModel,
         override val words: List<Word>,
         override val onRemoveWordButtonClick: (Int) -> Unit,
@@ -44,7 +41,6 @@ sealed interface EnterWordsStateHolder {
 
     data class Ready(
         override val playerName: String,
-        override val onBackButtonClick: () -> Unit,
         override val words: List<Word>,
         override val onRemoveWordButtonClick: (Int) -> Unit,
         val onReadyButtonClick: () -> Unit

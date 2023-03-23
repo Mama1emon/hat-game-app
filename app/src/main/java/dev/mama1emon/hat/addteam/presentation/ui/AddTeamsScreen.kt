@@ -16,7 +16,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import dev.mama1emon.hat.R
-import dev.mama1emon.hat.addteam.domain.models.Team
+import dev.mama1emon.hat.addteam.presentation.models.TeamField
 import dev.mama1emon.hat.addteam.presentation.states.AddTeamStateHolder
 import dev.mama1emon.hat.addteam.presentation.states.AddTeamStateHolder.ShowAlertAvailability
 import dev.mama1emon.hat.ds.components.AppBar
@@ -31,7 +31,6 @@ internal fun AddTeamsScreen(stateHolder: AddTeamStateHolder) {
     when (stateHolder) {
         is AddTeamStateHolder.Empty -> {
             EmptyAddTeamsScreen(
-                onBackButtonClick = stateHolder.navigationActions.onBackButtonClick,
                 onAddTeamButtonClick = stateHolder.onAddTeamButtonClick,
                 onEnterWordsButtonClick = stateHolder.navigationActions.onEnterWordsButtonClick,
             )
@@ -40,7 +39,6 @@ internal fun AddTeamsScreen(stateHolder: AddTeamStateHolder) {
             NotYetAddTeamsScreen(
                 enterWordsButtonEnabled = stateHolder.enterWordsButtonEnabled,
                 teams = stateHolder.teams,
-                onBackButtonClick = stateHolder.navigationActions.onBackButtonClick,
                 onAddTeamButtonClick = stateHolder.onAddTeamButtonClick,
                 onRemoveButtonClick = stateHolder.onRemoveButtonClick,
                 onEnterWordsButtonClick = stateHolder.navigationActions.onEnterWordsButtonClick,
@@ -49,7 +47,6 @@ internal fun AddTeamsScreen(stateHolder: AddTeamStateHolder) {
         is AddTeamStateHolder.Ready -> {
             ReadyAddTeamsScreen(
                 teams = stateHolder.teams,
-                onBackButtonClick = stateHolder.navigationActions.onBackButtonClick,
                 onRemoveButtonClick = stateHolder.onRemoveButtonClick,
                 onEnterWordsButtonClick = stateHolder.navigationActions.onEnterWordsButtonClick,
             )
@@ -63,7 +60,6 @@ internal fun AddTeamsScreen(stateHolder: AddTeamStateHolder) {
 
 @Composable
 private fun EmptyAddTeamsScreen(
-    onBackButtonClick: () -> Unit,
     onAddTeamButtonClick: () -> Unit,
     onEnterWordsButtonClick: () -> Unit
 ) {
@@ -76,7 +72,7 @@ private fun EmptyAddTeamsScreen(
             modifier = Modifier.align(Alignment.TopCenter),
             verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding24))
         ) {
-            AppBar(titleId = R.string.prepare_to_game, onClick = onBackButtonClick)
+            AppBar(titleId = R.string.prepare_to_game)
             AddTeamButton(onClick = onAddTeamButtonClick)
         }
 
@@ -103,8 +99,7 @@ private fun EmptyAddTeamsScreen(
 @Composable
 private fun NotYetAddTeamsScreen(
     enterWordsButtonEnabled: Boolean,
-    teams: List<Team>,
-    onBackButtonClick: () -> Unit,
+    teams: List<TeamField>,
     onAddTeamButtonClick: () -> Unit,
     onRemoveButtonClick: (UUID) -> Unit,
     onEnterWordsButtonClick: () -> Unit
@@ -115,7 +110,7 @@ private fun NotYetAddTeamsScreen(
             .background(LostInSadness)
     ) {
         Column(modifier = Modifier.align(Alignment.TopCenter)) {
-            AppBar(titleId = R.string.prepare_to_game, onClick = onBackButtonClick)
+            AppBar(titleId = R.string.prepare_to_game)
             Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.padding24)))
             AddTeamButton(onClick = onAddTeamButtonClick)
             Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.padding12)))
@@ -144,8 +139,7 @@ private fun NotYetAddTeamsScreen(
 
 @Composable
 private fun ReadyAddTeamsScreen(
-    teams: List<Team>,
-    onBackButtonClick: () -> Unit,
+    teams: List<TeamField>,
     onRemoveButtonClick: (UUID) -> Unit,
     onEnterWordsButtonClick: () -> Unit
 ) {
@@ -155,7 +149,7 @@ private fun ReadyAddTeamsScreen(
             .background(LostInSadness)
     ) {
         Column(modifier = Modifier.align(Alignment.TopCenter)) {
-            AppBar(titleId = R.string.prepare_to_game, onClick = onBackButtonClick)
+            AppBar(titleId = R.string.prepare_to_game)
             Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.padding24)))
             TeamsReadyBanner()
             Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.padding12)))

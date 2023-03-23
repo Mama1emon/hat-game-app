@@ -1,7 +1,7 @@
 package dev.mama1emon.hat.addteam.presentation.states
 
-import dev.mama1emon.hat.addteam.domain.models.Player
-import dev.mama1emon.hat.addteam.domain.models.Team
+import dev.mama1emon.hat.addteam.presentation.models.PlayerField
+import dev.mama1emon.hat.addteam.presentation.models.TeamField
 import java.util.*
 
 /**
@@ -35,8 +35,8 @@ internal sealed interface AddTeamStateHolder {
         }
 
         data class AddTeamAlertModel(
-            val team: Team,
-            val players: List<Player>,
+            val team: TeamField,
+            val players: List<PlayerField>,
             val readyButtonEnabled: Boolean,
             val onDismissRequest: () -> Unit,
             val onTeamNameChanged: (String) -> Unit,
@@ -46,7 +46,7 @@ internal sealed interface AddTeamStateHolder {
     }
 
     sealed interface RemoveTeamAvailability {
-        val teams: List<Team>
+        val teams: List<TeamField>
         val onRemoveButtonClick: (UUID) -> Unit
     }
 
@@ -58,23 +58,20 @@ internal sealed interface AddTeamStateHolder {
     ) : AddTeamStateHolder, ShowAlertAvailability
 
     data class NotYet(
-        val enterWordsButtonEnabled: Boolean,
         override val navigationActions: NavigationActions,
         override val isAddTeamAlertDrawn: Boolean,
         override val addTeamAlertModel: ShowAlertAvailability.AddTeamAlertModel,
         override val onAddTeamButtonClick: () -> Unit,
-        override val teams: List<Team>,
-        override val onRemoveButtonClick: (UUID) -> Unit
+        override val teams: List<TeamField>,
+        override val onRemoveButtonClick: (UUID) -> Unit,
+        val enterWordsButtonEnabled: Boolean
     ) : AddTeamStateHolder, ShowAlertAvailability, RemoveTeamAvailability
 
     data class Ready(
         override val navigationActions: NavigationActions,
-        override val teams: List<Team>,
+        override val teams: List<TeamField>,
         override val onRemoveButtonClick: (UUID) -> Unit,
     ) : AddTeamStateHolder, RemoveTeamAvailability
 
-    data class NavigationActions(
-        val onBackButtonClick: () -> Unit,
-        val onEnterWordsButtonClick: () -> Unit
-    )
+    data class NavigationActions(val onEnterWordsButtonClick: () -> Unit)
 }

@@ -9,4 +9,6 @@ sealed class Screens(val route: String, val args: List<NamedNavArgument> = listO
     object AddTeam : Screens(route = "add_team")
 
     object Announcement : Screens(route = "announcement")
+
+    object EnterWords : Screens(route = "enter_words")
 }

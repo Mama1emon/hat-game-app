@@ -43,7 +43,7 @@ private const val MAX_PROGRESS = 1f
 fun EnterWordsScreen(stateHolder: EnterWordsStateHolder) {
     Scaffold(
         topBar = {
-            AppBar(titleId = R.string.prepare_to_game, onClick = stateHolder.onBackButtonClick)
+            AppBar(titleId = R.string.prepare_to_game)
         },
         floatingActionButton = {
             if (stateHolder is EnterWordsStateHolder.Ready) {

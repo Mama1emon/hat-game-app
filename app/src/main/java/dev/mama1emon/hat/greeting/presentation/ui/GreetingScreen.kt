@@ -16,11 +16,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.style.TextDecoration
+import dev.mama1emon.hat.LocalGameManager
 import dev.mama1emon.hat.R
 import dev.mama1emon.hat.ds.components.OutlinedButton
 import dev.mama1emon.hat.ds.theme.*
-import dev.mama1emon.hat.navigation.LocalNavController
-import dev.mama1emon.hat.navigation.Screens
 
 @OptIn(ExperimentalTextApi::class)
 @Composable
@@ -58,9 +57,9 @@ fun GreetingScreen() {
                 .size(dimensionResource(R.dimen.size270))
         )
 
-        val navController = LocalNavController.current
+        val gameManager = LocalGameManager.current
         OutlinedButton(
-            onClick = { navController.navigate(Screens.AddTeam.route) },
+            onClick = gameManager::startTeamsPreparing,
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .padding(bottom = dimensionResource(R.dimen.padding20))

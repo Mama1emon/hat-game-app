@@ -1,15 +1,18 @@
 package dev.mama1emon.hat
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.getValue
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import dev.mama1emon.hat.ds.theme.HatTheme
@@ -39,6 +42,13 @@ class HatActivity : ComponentActivity() {
                 LocalGameManager provides gameManager
             ) {
                 HatTheme {
+                    val navBackStackEntry by navController.currentBackStackEntryAsState()
+
+                    navBackStackEntry?.destination?.route?.let {
+                        Log.d("NavHostController", "Переход на экран $it")
+                    }
+
+
                     NavHost(
                         navController = navController,
                         startDestination = HAT_GRAPH_NAME,

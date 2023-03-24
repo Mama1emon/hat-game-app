@@ -11,17 +11,24 @@ import dev.mama1emon.hat.game.GameStep
 object HatRouter {
 
     fun subscribeOnGameEvent(navController: NavHostController, gameManager: GameManager) {
-        when (gameManager.currentStep) {
+        when (val step = gameManager.currentStep) {
             is GameStep.Greeting -> {
-                navController.navigate(Screens.Greeting.route) {
-                    popUpTo(Screens.Greeting.route) { inclusive = true }
+                navController.navigate(route = Screens.Greeting.value()) {
+                    popUpTo(route = Screens.Greeting.value()) { inclusive = true }
                 }
             }
             is GameStep.StartTeamsPreparingStep -> {
-                navController.navigate(Screens.AddTeam.route)
+                navController.navigate(route = Screens.AddTeam.value())
             }
             is GameStep.FinishTeamsPreparingStep -> {
-                navController.navigate(Screens.Announcement.route)
+                navController.navigate(
+                    route = Screens.PlayerAttention.route(
+                        teamId = step.teamId,
+                        playerId = step.playerId,
+                        teamName = step.teamName,
+                        playerName = step.playerName
+                    )
+                )
             }
             is GameStep.StartPlayerPreparingStep -> {
                 //TODO()

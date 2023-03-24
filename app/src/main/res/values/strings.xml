@@ -23,4 +23,11 @@
     <string name="attention">Внимание</string>
     <string name="word">Слово</string>
     <string name="words_successfully_added">Слова успешно добавлены!</string>
+    <string name="i_am_player_with_name">Я - %s!</string>
+
+    <string-array name="give_the_device_to_specified_player">
+        <item>Передайте устройство игроку\n с именем\u0020</item>
+        <item>\u0020из команды\u0020</item>
+        <item>\u0020для ввода слов</item>
+    </string-array>
 </resources>

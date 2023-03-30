@@ -16,6 +16,7 @@
     <dimen name="padding40">40dp</dimen>
     <dimen name="padding46">46dp</dimen>
     <dimen name="padding48">48dp</dimen>
+    <dimen name="padding56">56dp</dimen>
     <dimen name="padding65">65dp</dimen>
     <dimen name="padding70">70dp</dimen>
 

@@ -3,7 +3,6 @@ package dev.mama1emon.hat.navigation
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
-import java.util.*
 
 sealed class Screens(
     route: String,
@@ -35,10 +34,8 @@ sealed class Screens(
             }
         )
     ) {
-        fun route(teamId: UUID, playerId: UUID, teamName: String, playerName: String): String {
+        fun route(teamName: String, playerName: String): String {
             return Route()
-                .addValue(key = TEAM_ID_KEY, value = teamId.toString())
-                .addValue(key = PLAYER_ID_KEY, value = playerId.toString())
                 .addValue(key = TEAM_NAME_KEY, value = teamName)
                 .addValue(key = PLAYER_NAME_KEY, value = playerName)
                 .destination()
@@ -46,6 +43,7 @@ sealed class Screens(
     }
 
     companion object {
+        const val PLAYER_KEY = "PLAYER_KEY"
         const val PLAYER_ID_KEY = "PLAYER_ID_KEY"
         const val PLAYER_NAME_KEY = "PLAYER_NAME_KEY"
 

@@ -6,6 +6,7 @@ package dev.mama1emon.hat.enterwords.presentation.models
 data class EnterWordFieldModel(
     val value: String,
     val hasError: Boolean,
+    val addWordButtonAvailability: Boolean,
     val onValueChanged: (String) -> Unit,
     val onDoneClick: () -> Unit
 )

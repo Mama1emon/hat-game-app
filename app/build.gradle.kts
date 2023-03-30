@@ -55,6 +55,7 @@ dependencies {
     implementation(Deps.activityCompose)
     implementation(Deps.activityKtx)
     implementation(Deps.foundationCompose)
+    implementation(Deps.gson)
     implementation(Deps.hilt)
     kapt(Deps.hiltCompiler)
     implementation(Deps.hiltNavigation)

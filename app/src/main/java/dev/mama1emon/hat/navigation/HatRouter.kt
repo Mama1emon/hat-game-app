@@ -23,8 +23,6 @@ object HatRouter {
             is GameStep.FinishTeamsPreparingStep -> {
                 navController.navigate(
                     route = Screens.PlayerAttention.route(
-                        teamId = step.teamId,
-                        playerId = step.playerId,
                         teamName = step.teamName,
                         playerName = step.playerName
                     )

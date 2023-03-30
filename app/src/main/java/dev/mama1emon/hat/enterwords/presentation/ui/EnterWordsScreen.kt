@@ -1,5 +1,9 @@
 package dev.mama1emon.hat.enterwords.presentation.ui
 
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -12,13 +16,15 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -31,20 +37,18 @@ import dev.mama1emon.hat.ds.components.CardActionItem
 import dev.mama1emon.hat.ds.theme.*
 import dev.mama1emon.hat.enterwords.presentation.models.EnterWordFieldModel
 import dev.mama1emon.hat.enterwords.presentation.models.Word
+import dev.mama1emon.hat.enterwords.presentation.states.EnterWordAvailability
 import dev.mama1emon.hat.enterwords.presentation.states.EnterWordsStateHolder
-
-private const val MIN_PROGRESS = 0.009f
-private const val MAX_PROGRESS = 1f
+import dev.mama1emon.hat.enterwords.presentation.states.RemoveWordsAvailability
 
 /**
  * @author Andrew Khokhlov on 22/03/2023
  */
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun EnterWordsScreen(stateHolder: EnterWordsStateHolder) {
+internal fun EnterWordsScreen(stateHolder: EnterWordsStateHolder) {
     Scaffold(
-        topBar = {
-            AppBar(titleId = R.string.prepare_to_game)
-        },
+        topBar = { AppBar(titleId = R.string.prepare_to_game) },
         floatingActionButton = {
             if (stateHolder is EnterWordsStateHolder.Ready) {
                 ReadyFloatButton(onClick = stateHolder.onReadyButtonClick)
@@ -52,71 +56,28 @@ fun EnterWordsScreen(stateHolder: EnterWordsStateHolder) {
         },
         floatingActionButtonPosition = FabPosition.End
     ) {
-        when (stateHolder) {
-            is EnterWordsStateHolder.Empty -> {
-                EmptyEnterWordsScreen(
-                    state = stateHolder,
-                    modifier = Modifier
-                        .padding(it)
-                        .fillMaxSize()
-                        .background(LostInSadness)
-                )
-            }
-            is EnterWordsStateHolder.NotYet -> {
-                NotYetEnterWordsScreen(
-                    state = stateHolder, modifier = Modifier
-                        .padding(it)
-                        .fillMaxSize()
-                        .background(LostInSadness)
-                )
-            }
-            is EnterWordsStateHolder.Ready -> {
-                ReadyEnterWordsScreen(
-                    state = stateHolder, modifier = Modifier
-                        .padding(it)
-                        .fillMaxSize()
-                        .background(LostInSadness)
-                )
-            }
-        }
-    }
-}
+        LazyColumn(
+            modifier = Modifier
+                .padding(it)
+                .fillMaxSize()
+                .background(LostInSadness)
+        ) {
+            stickyHeader { Header(stateHolder = stateHolder) }
 
-@Composable
-private fun EmptyEnterWordsScreen(
-    state: EnterWordsStateHolder.Empty,
-    modifier: Modifier = Modifier
-) {
-    Column(modifier) {
-        ProgressIndicator(progress = MIN_PROGRESS, name = state.playerName)
-        InputField(model = state.fieldModel)
-    }
-}
+            if (stateHolder is RemoveWordsAvailability) {
+                itemsIndexed(stateHolder.wordlist) { index, word ->
+                    AddedWordItem(
+                        word = word,
+                        index = index,
+                        words = stateHolder.wordlist,
+                        onRemoveWordClick = stateHolder.onRemoveWordButtonClick
+                    )
+                }
+            }
 
-@Composable
-private fun NotYetEnterWordsScreen(
-    state: EnterWordsStateHolder.NotYet,
-    modifier: Modifier = Modifier
-) {
-    LazyColumn(modifier) {
-        item { ProgressIndicator(progress = state.progress, name = state.playerName) }
-        item { InputField(model = state.fieldModel) }
-        itemsIndexed(state.words) { index, word ->
-            AddedWordItem(word, index, state.words, state.onRemoveWordButtonClick)
-        }
-    }
-}
-
-@Composable
-private fun ReadyEnterWordsScreen(
-    state: EnterWordsStateHolder.Ready,
-    modifier: Modifier = Modifier
-) {
-    LazyColumn(modifier = modifier) {
-        item { ProgressIndicator(progress = MAX_PROGRESS, name = state.playerName) }
-        item { PlayerReadyBanner() }
-        itemsIndexed(state.words) { index, word ->
-            AddedWordItem(word, index, state.words, state.onRemoveWordButtonClick)
+            item {
+                Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.padding56)))
+            }
         }
     }
 }
@@ -143,6 +104,23 @@ private fun ReadyFloatButton(onClick: () -> Unit) {
 }
 
 @Composable
+private fun Header(stateHolder: EnterWordsStateHolder) {
+    Column {
+        ProgressIndicator(
+            progress = stateHolder.progress,
+            name = stateHolder.playerName
+        )
+
+        var bannerHeight by remember { mutableStateOf(0) }
+        if (stateHolder is EnterWordAvailability) {
+            InputField(model = stateHolder.fieldModel, setBannerHeight = { bannerHeight = it })
+        } else {
+            PlayerReadyBanner(height = bannerHeight)
+        }
+    }
+}
+
+@Composable
 private fun ProgressIndicator(progress: Float, name: String) {
     Column(
         modifier = Modifier
@@ -154,20 +132,27 @@ private fun ProgressIndicator(progress: Float, name: String) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding24))
     ) {
-        Box(modifier = Modifier.size(dimensionResource(id = R.dimen.size180))) {
-            CircularProgressIndicator(
-                progress = progress,
-                modifier = Modifier.fillMaxSize(),
-                strokeWidth = dimensionResource(id = R.dimen.size6),
-                color = CitrusZest,
-            )
-            Text(
-                text = "${(progress * 100).toInt()}%",
-                modifier = Modifier.align(Alignment.Center),
-                color = White,
-                maxLines = 1,
-                style = HatTypography.Regular42
-            )
+        val animatePercentage = animateFloatAsState(
+            targetValue = progress,
+            animationSpec = tween(durationMillis = 1000, delayMillis = 0)
+        )
+
+        Crossfade(targetState = animatePercentage) {
+            Box(modifier = Modifier.size(dimensionResource(id = R.dimen.size180))) {
+                CircularProgressIndicator(
+                    progress = it.value,
+                    modifier = Modifier.fillMaxSize(),
+                    strokeWidth = dimensionResource(id = R.dimen.size6),
+                    color = CitrusZest,
+                )
+                Text(
+                    text = "${(progress * 100).toInt()}%",
+                    modifier = Modifier.align(Alignment.Center),
+                    color = White,
+                    maxLines = 1,
+                    style = HatTypography.Regular42
+                )
+            }
         }
 
         Text(
@@ -180,7 +165,7 @@ private fun ProgressIndicator(progress: Float, name: String) {
 }
 
 @Composable
-private fun InputField(model: EnterWordFieldModel) {
+private fun InputField(model: EnterWordFieldModel, setBannerHeight: (Int) -> Unit) {
     BasicTextField(
         value = model.value,
         onValueChange = model.onValueChanged,
@@ -191,7 +176,8 @@ private fun InputField(model: EnterWordFieldModel) {
                 width = dimensionResource(id = R.dimen.size1),
                 color = if (model.hasError) Color.Red else CitrusZest,
                 shape = RoundedCornerShape(size = dimensionResource(id = R.dimen.radius16))
-            ),
+            )
+            .onSizeChanged { setBannerHeight(it.height) },
         textStyle = HatTypography.Regular18.copy(color = White),
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Text,
@@ -228,44 +214,37 @@ private fun InputField(model: EnterWordFieldModel) {
                     }
                     innerTextField()
                 }
-
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(dimensionResource(id = R.dimen.size1))
-                        .background(
-                            if (model.hasError) SolidColor(Color.Red) else SolidColor(
-                                CitrusZest
-                            )
-                        )
-                )
             }
 
             Icon(
                 painter = painterResource(id = R.drawable.ic_36_plane),
                 contentDescription = null,
                 modifier = Modifier
-                    .clickable(onClick = model.onDoneClick, enabled = !model.hasError)
-                    .clip(shape = RoundedCornerShape(dimensionResource(id = R.dimen.radius8))),
-                tint = if (model.hasError) BlackEel else CitrusZest
+                    .clip(shape = CircleShape)
+                    .clickable(
+                        onClick = model.onDoneClick,
+                        enabled = model.addWordButtonAvailability
+                    ),
+                tint = if (model.addWordButtonAvailability) CitrusZest else BlackEel
             )
         }
     }
 }
 
 @Composable
-private fun PlayerReadyBanner() {
+private fun PlayerReadyBanner(height: Int) {
+    val density = LocalDensity.current
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .heightIn(dimensionResource(id = R.dimen.size54))
+            .heightIn(with(density) { height.toDp() })
             .background(SpanishRoast),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Box(
             modifier = Modifier
                 .width(dimensionResource(id = R.dimen.size6))
-                .height(dimensionResource(id = R.dimen.size54))
+                .height(with(density) { height.toDp() })
                 .background(CitrusZest)
         )
         Spacer(modifier = Modifier.width(dimensionResource(id = R.dimen.padding36)))

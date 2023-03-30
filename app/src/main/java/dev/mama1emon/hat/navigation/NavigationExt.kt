@@ -19,7 +19,6 @@ import dev.mama1emon.hat.announcement.presentation.ui.AnnouncementScreen
 import dev.mama1emon.hat.ds.theme.CitrusZest
 import dev.mama1emon.hat.greeting.presentation.ui.GreetingScreen
 import dev.mama1emon.hat.navigation.Screens.*
-import java.util.*
 
 const val HAT_GRAPH_NAME = "hat"
 
@@ -62,12 +61,7 @@ fun NavGraphBuilder.hatGraph() {
                     append(text = requireNotNull(value = strings.getOrNull(index = 2)))
                 },
                 buttonText = stringResource(id = R.string.i_am_player_with_name, playerName),
-                onButtonClick = {
-                    gameManager.startPlayerPreparing(
-                        teamId = UUID.fromString(entry.getString(Screens.TEAM_ID_KEY)),
-                        playerId = UUID.fromString(entry.getString(Screens.PLAYER_ID_KEY))
-                    )
-                }
+                onButtonClick = { gameManager.startPlayerPreparing() }
             )
         }
     }

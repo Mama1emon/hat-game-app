@@ -16,5 +16,6 @@ data class GameRules(
 
         const val MIN_PLAYER_NAME_LENGTH = 1
         const val MAX_PLAYER_NAME_LENGTH = 10
+        const val WORD_PATTERN = "^[A-ZА-Я][a-zа-я]{1,14}$"
     }
 }

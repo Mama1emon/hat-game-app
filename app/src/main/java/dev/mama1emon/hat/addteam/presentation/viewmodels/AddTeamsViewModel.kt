@@ -9,6 +9,8 @@ import dev.mama1emon.hat.R
 import dev.mama1emon.hat.addteam.presentation.models.PlayerField
 import dev.mama1emon.hat.addteam.presentation.models.TeamField
 import dev.mama1emon.hat.addteam.presentation.states.AddTeamStateHolder
+import dev.mama1emon.hat.addteam.presentation.states.RemoveTeamAvailability
+import dev.mama1emon.hat.addteam.presentation.states.ShowAlertAvailability
 import dev.mama1emon.hat.domain.models.Player
 import dev.mama1emon.hat.domain.models.Team
 import dev.mama1emon.hat.game.GameManager
@@ -37,22 +39,30 @@ internal class AddTeamsViewModel @Inject constructor(
 
         fun getInitialUiState(): AddTeamStateHolder {
             return AddTeamStateHolder.Empty(
-                navigationActions = AddTeamStateHolder.NavigationActions(
-                    onEnterWordsButtonClick = { gameManager.finishTeamsPreparing(teams) }
-                ),
                 isAddTeamAlertDrawn = false,
                 addTeamAlertModel = getInitialAlertModel(),
                 onAddTeamButtonClick = navigation::openAddTeamAlert,
             )
         }
 
+        private fun getInitialAlertModel(): ShowAlertAvailability.AddTeamAlertModel {
+            return ShowAlertAvailability.AddTeamAlertModel(
+                team = TeamField.Factory.create(),
+                players = listOf(PlayerField.Factory.create(), PlayerField.Factory.create()),
+                readyButtonEnabled = false,
+                onDismissRequest = navigation::closeAddTeamAlert,
+                onTeamNameChanged = inputFieldEditor::changeTeamName,
+                onPlayerNameChange = inputFieldEditor::changePlayerName,
+                onReadyClick = uiStateEditor::addTeam
+            )
+        }
+
         fun addTeam() {
-            (uiState as? AddTeamStateHolder.ShowAlertAvailability)?.let { state ->
+            (uiState as? ShowAlertAvailability)?.let { state ->
                 uiState = when (state) {
                     is AddTeamStateHolder.Empty -> {
                         AddTeamStateHolder.NotYet(
                             enterWordsButtonEnabled = false,
-                            navigationActions = state.navigationActions,
                             isAddTeamAlertDrawn = false,
                             addTeamAlertModel = state.addTeamAlertModel.copy(
                                 team = TeamField.Factory.create(),
@@ -66,14 +76,14 @@ internal class AddTeamsViewModel @Inject constructor(
                             teams = with(state.addTeamAlertModel.team) {
                                 listOf(TeamField.Factory.create(id = id, name = name))
                             },
-                            onRemoveButtonClick = ::removeTeam
+                            onRemoveButtonClick = ::removeTeam,
+                            onEnterWordsButtonClick = { gameManager.finishTeamsPreparing(teams) }
                         )
                     }
                     is AddTeamStateHolder.NotYet -> {
                         if (state.teams.size in 1 until GameRules.MAX_TEAMS_AMOUNT - 1) {
                             AddTeamStateHolder.NotYet(
                                 enterWordsButtonEnabled = state.enterWordsButtonEnabled,
-                                navigationActions = state.navigationActions,
                                 isAddTeamAlertDrawn = false,
                                 addTeamAlertModel = state.addTeamAlertModel.copy(
                                     team = TeamField.Factory.create(),
@@ -86,12 +96,13 @@ internal class AddTeamsViewModel @Inject constructor(
                                 onAddTeamButtonClick = state.onAddTeamButtonClick,
                                 teams = state.teams + state.addTeamAlertModel.team,
                                 onRemoveButtonClick = state.onRemoveButtonClick,
+                                onEnterWordsButtonClick = state.onEnterWordsButtonClick
                             )
                         } else {
                             AddTeamStateHolder.Ready(
-                                navigationActions = state.navigationActions,
                                 teams = state.teams + state.addTeamAlertModel.team,
                                 onRemoveButtonClick = state.onRemoveButtonClick,
+                                onEnterWordsButtonClick = state.onEnterWordsButtonClick
                             )
                         }
                     }
@@ -114,7 +125,7 @@ internal class AddTeamsViewModel @Inject constructor(
         }
 
         fun changeReadyButtonAvailability() {
-            (uiState as? AddTeamStateHolder.ShowAlertAvailability)?.let { state ->
+            (uiState as? ShowAlertAvailability)?.let { state ->
                 uiState = state.copySealed(
                     addTeamAlertModel = state.addTeamAlertModel.copy(
                         readyButtonEnabled = with(state.addTeamAlertModel) {
@@ -126,29 +137,16 @@ internal class AddTeamsViewModel @Inject constructor(
             }
         }
 
-        private fun getInitialAlertModel(): AddTeamStateHolder.ShowAlertAvailability.AddTeamAlertModel {
-            return AddTeamStateHolder.ShowAlertAvailability.AddTeamAlertModel(
-                team = TeamField.Factory.create(),
-                players = listOf(PlayerField.Factory.create(), PlayerField.Factory.create()),
-                readyButtonEnabled = false,
-                onDismissRequest = navigation::closeAddTeamAlert,
-                onTeamNameChanged = inputFieldEditor::changeTeamName,
-                onPlayerNameChange = inputFieldEditor::changePlayerName,
-                onReadyClick = uiStateEditor::addTeam
-            )
-        }
-
         private fun changeEnterWordsAvailability() {
             (uiState as? AddTeamStateHolder.NotYet)?.let { state ->
                 val teamAmountRange = GameRules.MIN_TEAMS_AMOUNT..GameRules.MAX_TEAMS_AMOUNT
-                uiState = state.copy(
-                    enterWordsButtonEnabled = state.teams.size in teamAmountRange
-                )
+
+                uiState = state.copy(enterWordsButtonEnabled = state.teams.size in teamAmountRange)
             }
         }
 
         private fun removeTeam(teamId: UUID) {
-            (uiState as? AddTeamStateHolder.RemoveTeamAvailability)?.let { state ->
+            (uiState as? RemoveTeamAvailability)?.let { state ->
                 if (!state.teams.any { it.id == teamId }) {
                     error("Команды с id $teamId не существует")
                 }
@@ -157,7 +155,6 @@ internal class AddTeamsViewModel @Inject constructor(
                     is AddTeamStateHolder.NotYet -> {
                         if (state.teams.size == 1) {
                             AddTeamStateHolder.Empty(
-                                navigationActions = state.navigationActions,
                                 isAddTeamAlertDrawn = false,
                                 addTeamAlertModel = state.addTeamAlertModel.copy(
                                     team = TeamField.Factory.create(),
@@ -172,7 +169,6 @@ internal class AddTeamsViewModel @Inject constructor(
                         } else {
                             AddTeamStateHolder.NotYet(
                                 enterWordsButtonEnabled = state.enterWordsButtonEnabled,
-                                navigationActions = state.navigationActions,
                                 isAddTeamAlertDrawn = false,
                                 addTeamAlertModel = state.addTeamAlertModel.copy(
                                     team = TeamField.Factory.create(),
@@ -184,16 +180,16 @@ internal class AddTeamsViewModel @Inject constructor(
                                 ),
                                 onAddTeamButtonClick = state.onAddTeamButtonClick,
                                 teams = state.teams.filter { it.id != teamId },
-                                onRemoveButtonClick = state.onRemoveButtonClick
+                                onRemoveButtonClick = state.onRemoveButtonClick,
+                                onEnterWordsButtonClick = state.onEnterWordsButtonClick
                             )
                         }
                     }
                     is AddTeamStateHolder.Ready -> {
                         AddTeamStateHolder.NotYet(
                             enterWordsButtonEnabled = true,
-                            navigationActions = state.navigationActions,
                             isAddTeamAlertDrawn = false,
-                            addTeamAlertModel = AddTeamStateHolder.ShowAlertAvailability.AddTeamAlertModel(
+                            addTeamAlertModel = ShowAlertAvailability.AddTeamAlertModel(
                                 team = TeamField.Factory.create(),
                                 players = listOf(
                                     PlayerField.Factory.create(),
@@ -207,7 +203,8 @@ internal class AddTeamsViewModel @Inject constructor(
                             ),
                             onAddTeamButtonClick = navigation::openAddTeamAlert,
                             teams = state.teams.filter { it.id != teamId },
-                            onRemoveButtonClick = state.onRemoveButtonClick
+                            onRemoveButtonClick = state.onRemoveButtonClick,
+                            onEnterWordsButtonClick = state.onEnterWordsButtonClick
                         )
                     }
                 }
@@ -222,41 +219,43 @@ internal class AddTeamsViewModel @Inject constructor(
     private inner class InputFieldEditor {
 
         fun changeTeamName(newName: String) {
-            (uiState as? AddTeamStateHolder.ShowAlertAvailability)?.let { state ->
+            (uiState as? ShowAlertAvailability)?.let { state ->
                 val otherTeamsNames = when (state) {
                     is AddTeamStateHolder.Empty -> emptyList()
                     is AddTeamStateHolder.NotYet -> state.teams
                 }
 
+                val editableName = newName.toRightForm()
+
                 val isNotValidTeamName by lazy {
-                    newName.length !in GameRules.MIN_TEAM_NAME_LENGTH
+                    editableName.length !in GameRules.MIN_TEAM_NAME_LENGTH
                         .rangeTo(GameRules.MAX_TEAM_NAME_LENGTH)
                 }
 
                 uiState = state.copySealed(
                     addTeamAlertModel = state.addTeamAlertModel.copy(
-                        team = if (newName.isBlank()) {
+                        team = if (editableName.isBlank()) {
                             TeamField.Factory.createWithError(
                                 id = state.addTeamAlertModel.team.id,
-                                name = newName,
+                                name = editableName,
                                 errorResId = R.string.empty_team_name
                             )
-                        } else if (otherTeamsNames.any { it.name == newName }) {
+                        } else if (otherTeamsNames.any { it.name == editableName }) {
                             TeamField.Factory.createWithError(
                                 id = state.addTeamAlertModel.team.id,
-                                name = newName,
+                                name = editableName,
                                 errorResId = R.string.team_name_is_not_available
                             )
                         } else if (isNotValidTeamName) {
                             TeamField.Factory.createWithError(
                                 id = state.addTeamAlertModel.team.id,
-                                name = newName,
+                                name = editableName,
                                 errorResId = R.string.is_not_greather_than_ten_characters
                             )
                         } else {
                             TeamField.Factory.create(
                                 id = state.addTeamAlertModel.team.id,
-                                name = newName
+                                name = editableName
                             )
                         }
                     )
@@ -267,46 +266,47 @@ internal class AddTeamsViewModel @Inject constructor(
         }
 
         fun changePlayerName(newName: String, editableIndex: Int) {
-            (uiState as? AddTeamStateHolder.ShowAlertAvailability)?.let { state ->
+            (uiState as? ShowAlertAvailability)?.let { state ->
+                val editableName = newName.toRightForm()
 
                 val isNotValidPlayerName by lazy {
-                    newName.length !in GameRules.MIN_PLAYER_NAME_LENGTH
+                    editableName.length !in GameRules.MIN_PLAYER_NAME_LENGTH
                         .rangeTo(GameRules.MAX_PLAYER_NAME_LENGTH)
                 }
 
-                val editablePlayer = requireNotNull(
-                    value = state.addTeamAlertModel.players.getOrNull(editableIndex)
+                val editablePlayerId = requireNotNull(
+                    value = state.addTeamAlertModel.players.getOrNull(editableIndex)?.id
                 )
                 uiState = state.copySealed(
                     addTeamAlertModel = state.addTeamAlertModel.copy(
                         players = state.addTeamAlertModel.players.checkEveryPlayer(
-                            newName = newName,
+                            newName = editableName,
                             editableIndex = editableIndex,
-                            editablePlayer = if (newName.isBlank()) {
+                            editablePlayer = if (editableName.isBlank()) {
                                 PlayerField.Factory.createWithError(
-                                    id = editablePlayer.id,
-                                    name = newName,
+                                    id = editablePlayerId,
+                                    name = editableName,
                                     errorResId = R.string.empty_player_name
                                 )
                             } else if (isNotValidPlayerName) {
                                 PlayerField.Factory.createWithError(
-                                    id = editablePlayer.id,
-                                    name = newName,
+                                    id = editablePlayerId,
+                                    name = editableName,
                                     errorResId = R.string.is_not_greather_than_ten_characters
                                 )
                             } else if (state.addTeamAlertModel.players
                                     .filterIndexed { index, _ -> index != editableIndex }
-                                    .any { it.name == newName }
+                                    .any { it.name == editableName }
                             ) {
                                 PlayerField.Factory.createWithError(
-                                    id = editablePlayer.id,
-                                    name = newName,
+                                    id = editablePlayerId,
+                                    name = editableName,
                                     errorResId = R.string.player_name_is_not_available
                                 )
                             } else {
                                 PlayerField.Factory.create(
-                                    id = editablePlayer.id,
-                                    name = newName
+                                    id = editablePlayerId,
+                                    name = editableName
                                 )
                             },
                         )
@@ -332,36 +332,46 @@ internal class AddTeamsViewModel @Inject constructor(
                     editablePlayer
                 } else if (player.name.isBlank()) {
                     PlayerField.Factory.createWithError(
-                        id = editablePlayer.id,
+                        id = player.id,
                         name = player.name,
                         errorResId = R.string.empty_player_name
                     )
                 } else if (isNotValidPlayerName) {
                     PlayerField.Factory.createWithError(
-                        id = editablePlayer.id,
+                        id = player.id,
                         name = player.name,
                         errorResId = R.string.is_not_greather_than_ten_characters
                     )
                 } else if (player.name == newName) {
                     PlayerField.Factory.createWithError(
-                        id = editablePlayer.id,
+                        id = player.id,
                         name = player.name,
                         errorResId = R.string.player_name_is_not_available
                     )
                 } else {
-                    PlayerField.Factory.create(
-                        id = editablePlayer.id,
-                        name = player.name
-                    )
+                    PlayerField.Factory.create(id = player.id, name = player.name)
                 }
             }
         }
+
+        private fun String.toRightForm(): String {
+            return this
+                .lowercase()
+                .replaceFirstChar { firstLetter ->
+                    if (firstLetter.isLowerCase()) {
+                        firstLetter.titlecase(Locale.ROOT)
+                    } else {
+                        firstLetter.toString()
+                    }
+                }
+        }
+
     }
 
     private inner class Navigation {
 
         fun openAddTeamAlert() {
-            (uiState as? AddTeamStateHolder.ShowAlertAvailability)?.let { state ->
+            (uiState as? ShowAlertAvailability)?.let { state ->
                 uiState = state.copySealed(
                     isAddTeamAlertDrawn = true,
                     addTeamAlertModel = state.addTeamAlertModel.copy(
@@ -385,7 +395,7 @@ internal class AddTeamsViewModel @Inject constructor(
         }
 
         fun closeAddTeamAlert() {
-            (uiState as? AddTeamStateHolder.ShowAlertAvailability)?.let {
+            (uiState as? ShowAlertAvailability)?.let {
                 uiState = it.copySealed(isAddTeamAlertDrawn = false)
             }
         }

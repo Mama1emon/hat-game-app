@@ -18,7 +18,7 @@ import androidx.compose.ui.res.stringResource
 import dev.mama1emon.hat.R
 import dev.mama1emon.hat.addteam.presentation.models.TeamField
 import dev.mama1emon.hat.addteam.presentation.states.AddTeamStateHolder
-import dev.mama1emon.hat.addteam.presentation.states.AddTeamStateHolder.ShowAlertAvailability
+import dev.mama1emon.hat.addteam.presentation.states.ShowAlertAvailability
 import dev.mama1emon.hat.ds.components.AppBar
 import dev.mama1emon.hat.ds.components.CardAction
 import dev.mama1emon.hat.ds.components.CardActionItem
@@ -31,24 +31,25 @@ internal fun AddTeamsScreen(stateHolder: AddTeamStateHolder) {
     when (stateHolder) {
         is AddTeamStateHolder.Empty -> {
             EmptyAddTeamsScreen(
+                enterWordsButtonEnabled = stateHolder.enterWordsButtonEnabled,
                 onAddTeamButtonClick = stateHolder.onAddTeamButtonClick,
-                onEnterWordsButtonClick = stateHolder.navigationActions.onEnterWordsButtonClick,
+                onEnterWordsButtonClick = stateHolder.onEnterWordsButtonClick,
             )
         }
         is AddTeamStateHolder.NotYet -> {
             NotYetAddTeamsScreen(
-                enterWordsButtonEnabled = stateHolder.enterWordsButtonEnabled,
                 teams = stateHolder.teams,
                 onAddTeamButtonClick = stateHolder.onAddTeamButtonClick,
                 onRemoveButtonClick = stateHolder.onRemoveButtonClick,
-                onEnterWordsButtonClick = stateHolder.navigationActions.onEnterWordsButtonClick,
+                enterWordsButtonEnabled = stateHolder.enterWordsButtonEnabled,
+                onEnterWordsButtonClick = stateHolder.onEnterWordsButtonClick,
             )
         }
         is AddTeamStateHolder.Ready -> {
             ReadyAddTeamsScreen(
                 teams = stateHolder.teams,
                 onRemoveButtonClick = stateHolder.onRemoveButtonClick,
-                onEnterWordsButtonClick = stateHolder.navigationActions.onEnterWordsButtonClick,
+                onEnterWordsButtonClick = stateHolder.onEnterWordsButtonClick,
             )
         }
     }
@@ -60,8 +61,9 @@ internal fun AddTeamsScreen(stateHolder: AddTeamStateHolder) {
 
 @Composable
 private fun EmptyAddTeamsScreen(
+    enterWordsButtonEnabled: Boolean,
     onAddTeamButtonClick: () -> Unit,
-    onEnterWordsButtonClick: () -> Unit
+    onEnterWordsButtonClick: () -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -86,7 +88,7 @@ private fun EmptyAddTeamsScreen(
 
         LargeButton(
             textId = R.string.enter_words,
-            enabled = false,
+            enabled = enterWordsButtonEnabled,
             onClick = onEnterWordsButtonClick,
             modifier = Modifier
                 .align(Alignment.BottomCenter)

@@ -20,14 +20,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import dev.mama1emon.hat.R
-import dev.mama1emon.hat.addteam.presentation.states.AddTeamStateHolder
+import dev.mama1emon.hat.addteam.presentation.states.ShowAlertAvailability
 import dev.mama1emon.hat.ds.components.SmallButton
 import dev.mama1emon.hat.ds.components.TitleInputField
 import dev.mama1emon.hat.ds.theme.*
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-internal fun AddTeamAlert(model: AddTeamStateHolder.ShowAlertAvailability.AddTeamAlertModel) {
+internal fun AddTeamAlert(model: ShowAlertAvailability.AddTeamAlertModel) {
     Box(
         modifier = Modifier
             .padding(horizontal = dimensionResource(id = R.dimen.padding32))

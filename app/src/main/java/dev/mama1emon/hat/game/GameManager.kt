@@ -21,7 +21,7 @@ class GameManager @Inject constructor() {
     var currentStep: GameStep by mutableStateOf(GameStep.Greeting)
         private set
 
-    private var teams: List<Team> = emptyList()
+    private var savedTeams: Set<Team> = emptySet()
     private val readyPlayerIds = mutableListOf<UUID>()
     private var currentPlayer: Player by Delegates.notNull()
 
@@ -34,12 +34,12 @@ class GameManager @Inject constructor() {
         logEvents("Начать подготовку команд")
     }
 
-    fun finishTeamsPreparing(teams: List<Team>) {
-        this.teams = teams
+    fun finishTeamsPreparing(teams: Set<Team>) {
+        savedTeams = savedTeams + teams.filterNot { it.id in savedTeams.map(Team::id) }
         readyPlayerIds.clear()
         logEvents("Закончить подготовку команд")
 
-        val team = requireNotNull(teams.firstOrNull())
+        val team = requireNotNull(savedTeams.firstOrNull())
         val player = requireNotNull(team.players.firstOrNull())
         logEvents("Начать подготовку игроков")
 
@@ -54,7 +54,7 @@ class GameManager @Inject constructor() {
 
     fun startPlayerPreparing() {
         val teamName = requireNotNull(
-            value = teams.firstOrNull { team -> team.players.any { it == currentPlayer } }?.name
+            value = savedTeams.firstOrNull { team -> team.players.any { it == currentPlayer } }?.name
         )
 
         currentStep = GameStep.StartPlayerPreparingStep(player = currentPlayer)
@@ -63,7 +63,7 @@ class GameManager @Inject constructor() {
 
     fun finishPlayerPreparing(wordlist: List<String>) {
         val finishedTeam = requireNotNull(
-            value = teams.firstOrNull { team -> team.players.any { it == currentPlayer } }
+            value = savedTeams.firstOrNull { team -> team.players.any { it == currentPlayer } }
         )
 
         logEvents(
@@ -71,24 +71,27 @@ class GameManager @Inject constructor() {
                 "завершил ввод слов"
         )
 
-        teams = teams.map { team ->
-            if (team.id == finishedTeam.id) {
-                team.copy(
-                    players = team.players.map { player ->
-                        if (player.id == currentPlayer.id) {
-                            player.copy(wordlist = wordlist)
-                        } else {
-                            player
+        savedTeams = savedTeams
+            .map { team ->
+                if (team.id == finishedTeam.id) {
+                    team.copy(
+                        players = team.players.map { player ->
+                            if (player.id == currentPlayer.id) {
+                                player.copy(wordlist = wordlist)
+                            } else {
+                                player
+                            }
                         }
-                    }
-                )
-            } else {
-                team
+                    )
+                } else {
+                    team
+                }
             }
-        }
+            .toSet()
+
         readyPlayerIds.add(currentPlayer.id)
 
-        val nextTeam = teams.firstOrNull { nextTeam ->
+        val nextTeam = savedTeams.firstOrNull { nextTeam ->
             nextTeam.players.any { it.id !in readyPlayerIds }
         }
         if (nextTeam != null) {

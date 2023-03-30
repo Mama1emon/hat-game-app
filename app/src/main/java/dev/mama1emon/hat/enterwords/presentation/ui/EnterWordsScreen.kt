@@ -23,8 +23,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -111,11 +109,10 @@ private fun Header(stateHolder: EnterWordsStateHolder) {
             name = stateHolder.playerName
         )
 
-        var bannerHeight by remember { mutableStateOf(0) }
         if (stateHolder is EnterWordAvailability) {
-            InputField(model = stateHolder.fieldModel, setBannerHeight = { bannerHeight = it })
+            InputField(model = stateHolder.fieldModel)
         } else {
-            PlayerReadyBanner(height = bannerHeight)
+            PlayerReadyBanner()
         }
     }
 }
@@ -165,19 +162,19 @@ private fun ProgressIndicator(progress: Float, name: String) {
 }
 
 @Composable
-private fun InputField(model: EnterWordFieldModel, setBannerHeight: (Int) -> Unit) {
+private fun InputField(model: EnterWordFieldModel) {
     BasicTextField(
         value = model.value,
         onValueChange = model.onValueChanged,
         modifier = Modifier
             .padding(horizontal = dimensionResource(id = R.dimen.padding16))
             .fillMaxWidth()
+            .height(height = dimensionResource(id = R.dimen.padding50))
             .border(
                 width = dimensionResource(id = R.dimen.size1),
                 color = if (model.hasError) Color.Red else CitrusZest,
                 shape = RoundedCornerShape(size = dimensionResource(id = R.dimen.radius16))
-            )
-            .onSizeChanged { setBannerHeight(it.height) },
+            ),
         textStyle = HatTypography.Regular18.copy(color = White),
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Text,
@@ -232,19 +229,18 @@ private fun InputField(model: EnterWordFieldModel, setBannerHeight: (Int) -> Uni
 }
 
 @Composable
-private fun PlayerReadyBanner(height: Int) {
-    val density = LocalDensity.current
+private fun PlayerReadyBanner() {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .heightIn(with(density) { height.toDp() })
+            .heightIn(min = dimensionResource(id = R.dimen.padding50))
             .background(SpanishRoast),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Box(
             modifier = Modifier
                 .width(dimensionResource(id = R.dimen.size6))
-                .height(with(density) { height.toDp() })
+                .height(height = dimensionResource(id = R.dimen.padding50))
                 .background(CitrusZest)
         )
         Spacer(modifier = Modifier.width(dimensionResource(id = R.dimen.padding36)))

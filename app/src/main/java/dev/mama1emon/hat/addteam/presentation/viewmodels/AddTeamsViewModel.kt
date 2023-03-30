@@ -33,7 +33,7 @@ internal class AddTeamsViewModel @Inject constructor(
     var uiState: AddTeamStateHolder by mutableStateOf(uiStateEditor.getInitialUiState())
         private set
 
-    private val teams = mutableListOf<Team>()
+    private val teams = mutableSetOf<Team>()
 
     private inner class UiStateEditor {
 
@@ -209,7 +209,7 @@ internal class AddTeamsViewModel @Inject constructor(
                     }
                 }
 
-                teams.removeAt(index = state.teams.indexOfFirst { it.id == teamId })
+                teams.remove(element = teams.firstOrNull { it.id == teamId })
             }
 
             changeEnterWordsAvailability()

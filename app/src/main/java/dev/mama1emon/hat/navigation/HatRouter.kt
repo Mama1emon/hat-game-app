@@ -1,7 +1,9 @@
 package dev.mama1emon.hat.navigation
 
+import android.widget.Toast
 import androidx.navigation.NavHostController
 import dev.mama1emon.hat.HatActivity
+import dev.mama1emon.hat.R
 import dev.mama1emon.hat.game.GameManager
 import dev.mama1emon.hat.game.GameStep
 
@@ -9,6 +11,8 @@ import dev.mama1emon.hat.game.GameStep
  * @author Andrew Khokhlov on 23/03/2023
  */
 object HatRouter {
+
+    private var isFirstAttemptToExit = true
 
     fun subscribeOnGameEvent(navController: NavHostController, gameManager: GameManager) {
         when (val step = gameManager.currentStep) {
@@ -43,16 +47,33 @@ object HatRouter {
                 //TODO()
             }
         }
+        isFirstAttemptToExit = true
     }
 
     fun handleOnBackPressedEvent(navController: NavHostController, gameManager: GameManager) {
         when (gameManager.currentStep) {
-            is GameStep.Greeting -> requireNotNull(navController.context as? HatActivity).finish()
+            is GameStep.Greeting -> {
+                requireNotNull(navController.context as? HatActivity).finish()
+            }
             is GameStep.StartTeamsPreparingStep,
             is GameStep.FinishTeamsPreparingStep,
             is GameStep.StartPlayerPreparingStep,
-            is GameStep.FinishPlayerPreparingStep -> gameManager.cancelPreparing()
-            GameStep.StartGame -> TODO()
+            is GameStep.FinishPlayerPreparingStep -> {
+                isFirstAttemptToExit = if (isFirstAttemptToExit) {
+                    Toast.makeText(
+                        navController.context,
+                        R.string.are_you_sure_you_want_to_go_out,
+                        Toast.LENGTH_LONG
+                    ).show()
+                    true
+                } else {
+                    gameManager.cancelPreparing()
+                    false
+                }
+            }
+            GameStep.StartGame -> {
+                TODO()
+            }
         }
     }
 }

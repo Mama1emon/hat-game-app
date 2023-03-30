@@ -24,6 +24,7 @@
     <string name="word">Слово</string>
     <string name="words_successfully_added">Слова успешно добавлены!</string>
     <string name="i_am_player_with_name">Я - %s!</string>
+    <string name="are_you_sure_you_want_to_go_out">Вы точно хотите выйти?</string>
 
     <string-array name="give_the_device_to_specified_player">
         <item>Передайте устройство игроку\n с именем\u0020</item>

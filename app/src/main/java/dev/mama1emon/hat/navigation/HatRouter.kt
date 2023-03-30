@@ -29,10 +29,15 @@ object HatRouter {
                 )
             }
             is GameStep.StartPlayerPreparingStep -> {
-                //TODO()
+                navController.navigate(route = Screens.EnterWords.route(step.player))
             }
             is GameStep.FinishPlayerPreparingStep -> {
-                //TODO()
+                navController.navigate(
+                    route = Screens.PlayerAttention.route(
+                        teamName = step.teamName,
+                        playerName = step.playerName
+                    )
+                )
             }
             is GameStep.StartGame -> {
                 //TODO()

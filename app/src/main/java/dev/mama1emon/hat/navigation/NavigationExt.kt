@@ -17,6 +17,8 @@ import dev.mama1emon.hat.addteam.presentation.ui.AddTeamsScreen
 import dev.mama1emon.hat.addteam.presentation.viewmodels.AddTeamsViewModel
 import dev.mama1emon.hat.announcement.presentation.ui.AnnouncementScreen
 import dev.mama1emon.hat.ds.theme.CitrusZest
+import dev.mama1emon.hat.enterwords.presentation.ui.EnterWordsScreen
+import dev.mama1emon.hat.enterwords.presentation.viewmodels.EnterWordsViewModel
 import dev.mama1emon.hat.greeting.presentation.ui.GreetingScreen
 import dev.mama1emon.hat.navigation.Screens.*
 
@@ -61,8 +63,14 @@ fun NavGraphBuilder.hatGraph() {
                     append(text = requireNotNull(value = strings.getOrNull(index = 2)))
                 },
                 buttonText = stringResource(id = R.string.i_am_player_with_name, playerName),
-                onButtonClick = { gameManager.startPlayerPreparing() }
+                onButtonClick = gameManager::startPlayerPreparing
             )
+        }
+
+        composable(route = EnterWords.value(), arguments = EnterWords.arguments) {
+            val viewModel = hiltViewModel<EnterWordsViewModel>()
+
+            EnterWordsScreen(stateHolder = viewModel.uiState)
         }
     }
 }

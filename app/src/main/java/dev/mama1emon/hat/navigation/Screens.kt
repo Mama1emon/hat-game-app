@@ -3,6 +3,8 @@ package dev.mama1emon.hat.navigation
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
+import com.google.gson.Gson
+import dev.mama1emon.hat.domain.models.Player
 
 sealed class Screens(
     route: String,
@@ -16,14 +18,6 @@ sealed class Screens(
     object PlayerAttention : Screens(
         route = "player_attention",
         args = listOf(
-            navArgument(name = TEAM_ID_KEY) {
-                type = NavType.StringType
-                nullable = false
-            },
-            navArgument(name = PLAYER_ID_KEY) {
-                type = NavType.StringType
-                nullable = false
-            },
             navArgument(name = TEAM_NAME_KEY) {
                 type = NavType.StringType
                 nullable = false
@@ -42,12 +36,27 @@ sealed class Screens(
         }
     }
 
+    object EnterWords : Screens(
+        route = "enter_words",
+        args = listOf(
+            navArgument(name = PLAYER_KEY) {
+                type = NavType.StringType
+                nullable = false
+            }
+        )
+    ) {
+        fun route(player: Player): String {
+            return Route()
+                .addValue(key = PLAYER_KEY, value = Gson().toJson(player))
+                .destination()
+        }
+    }
+
+    object GameRoundAnnouncement : Screens(route = "game_round_announcement")
+
     companion object {
         const val PLAYER_KEY = "PLAYER_KEY"
-        const val PLAYER_ID_KEY = "PLAYER_ID_KEY"
         const val PLAYER_NAME_KEY = "PLAYER_NAME_KEY"
-
-        const val TEAM_ID_KEY = "TEAM_ID_KEY"
         const val TEAM_NAME_KEY = "TEAM_NAME_KEY"
     }
 }

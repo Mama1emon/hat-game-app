@@ -26,7 +26,7 @@ object HatRouter {
             }
             is GameStep.FinishTeamsPreparingStep -> {
                 navController.navigate(
-                    route = Screens.PlayerAttention.route(
+                    route = Screens.PlayerPreparingAnnouncement.route(
                         teamName = step.teamName,
                         playerName = step.playerName
                     )
@@ -37,14 +37,17 @@ object HatRouter {
             }
             is GameStep.FinishPlayerPreparingStep -> {
                 navController.navigate(
-                    route = Screens.PlayerAttention.route(
+                    route = Screens.PlayerPreparingAnnouncement.route(
                         teamName = step.teamName,
                         playerName = step.playerName
                     )
                 )
             }
-            is GameStep.StartGame -> {
-                //TODO()
+            is GameStep.StartGameRoundStep -> {
+                navController.navigate(route = Screens.GameRoundAnnouncement.route(round = step))
+            }
+            GameStep.StartPlayerMoveStep -> {
+                // TODO("HAT-31")
             }
         }
         isFirstAttemptToExit = true
@@ -71,8 +74,9 @@ object HatRouter {
                     true
                 }
             }
-            GameStep.StartGame -> {
-                TODO()
+            is GameStep.StartGameRoundStep,
+            is GameStep.StartPlayerMoveStep -> {
+                // TODO("HAT-37")
             }
         }
     }

@@ -10,15 +10,18 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.google.gson.Gson
 import dev.mama1emon.hat.LocalActivityViewModelStoreOwner
 import dev.mama1emon.hat.LocalGameManager
 import dev.mama1emon.hat.R
 import dev.mama1emon.hat.addteam.presentation.ui.AddTeamsScreen
 import dev.mama1emon.hat.addteam.presentation.viewmodels.AddTeamsViewModel
 import dev.mama1emon.hat.announcement.presentation.ui.AnnouncementScreen
+import dev.mama1emon.hat.announcement.round.presentation.ui.GameRoundAnnouncementScreen
 import dev.mama1emon.hat.ds.theme.CitrusZest
 import dev.mama1emon.hat.enterwords.presentation.ui.EnterWordsScreen
 import dev.mama1emon.hat.enterwords.presentation.viewmodels.EnterWordsViewModel
+import dev.mama1emon.hat.game.GameStep
 import dev.mama1emon.hat.greeting.presentation.ui.GreetingScreen
 import dev.mama1emon.hat.navigation.Screens.*
 
@@ -39,14 +42,14 @@ fun NavGraphBuilder.hatGraph() {
         }
 
         composable(
-            route = PlayerAttention.value(),
-            arguments = PlayerAttention.arguments
+            route = PlayerPreparingAnnouncement.value(),
+            arguments = PlayerPreparingAnnouncement.arguments
         ) { entry ->
             val playerName = entry.getString(Screens.PLAYER_NAME_KEY)
 
             val gameManager = LocalGameManager.current
             AnnouncementScreen(
-                titleResId = R.string.attention,
+                title = stringResource(id = R.string.attention),
                 imageResId = R.drawable.ill_bell_alarm,
                 description = buildAnnotatedString {
                     val strings = stringArrayResource(
@@ -71,6 +74,18 @@ fun NavGraphBuilder.hatGraph() {
             val viewModel = hiltViewModel<EnterWordsViewModel>()
 
             EnterWordsScreen(stateHolder = viewModel.uiState)
+        }
+
+        composable(
+            route = GameRoundAnnouncement.value(),
+            arguments = GameRoundAnnouncement.arguments
+        ) {
+            GameRoundAnnouncementScreen(
+                round = Gson().fromJson(
+                    it.getString(Screens.GAME_ROUND_KEY),
+                    GameStep.StartGameRoundStep::class.java
+                )
+            )
         }
     }
 }

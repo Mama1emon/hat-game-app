@@ -1,7 +1,6 @@
 package dev.mama1emon.hat.announcement.presentation.ui
 
 import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -15,7 +14,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.TextAlign
 import dev.mama1emon.hat.R
@@ -26,7 +24,7 @@ import dev.mama1emon.hat.ds.theme.*
  */
 @Composable
 fun AnnouncementScreen(
-    @StringRes titleResId: Int,
+    title: String,
     @DrawableRes imageResId: Int,
     description: AnnotatedString,
     buttonText: String,
@@ -40,7 +38,7 @@ fun AnnouncementScreen(
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = stringResource(id = titleResId),
+            text = title,
             color = White,
             textAlign = TextAlign.Center,
             maxLines = 1,

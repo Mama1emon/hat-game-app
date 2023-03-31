@@ -5,6 +5,7 @@ import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.google.gson.Gson
 import dev.mama1emon.hat.domain.models.Player
+import dev.mama1emon.hat.game.GameStep
 
 sealed class Screens(
     route: String,
@@ -15,8 +16,8 @@ sealed class Screens(
 
     object AddTeam : Screens(route = "add_team")
 
-    object PlayerAttention : Screens(
-        route = "player_attention",
+    object PlayerPreparingAnnouncement : Screens(
+        route = "player_preparing_announcement",
         args = listOf(
             navArgument(name = TEAM_NAME_KEY) {
                 type = NavType.StringType
@@ -52,11 +53,26 @@ sealed class Screens(
         }
     }
 
-    object GameRoundAnnouncement : Screens(route = "game_round_announcement")
+    object GameRoundAnnouncement : Screens(
+        route = "game_round_announcement",
+        args = listOf(
+            navArgument(name = GAME_ROUND_KEY) {
+                type = NavType.StringType
+                nullable = false
+            }
+        )
+    ) {
+        fun route(round: GameStep.StartGameRoundStep): String {
+            return Route()
+                .addValue(key = GAME_ROUND_KEY, value = Gson().toJson(round))
+                .destination()
+        }
+    }
 
     companion object {
         const val PLAYER_KEY = "PLAYER_KEY"
         const val PLAYER_NAME_KEY = "PLAYER_NAME_KEY"
         const val TEAM_NAME_KEY = "TEAM_NAME_KEY"
+        const val GAME_ROUND_KEY = "GAME_ROUND_KEY"
     }
 }

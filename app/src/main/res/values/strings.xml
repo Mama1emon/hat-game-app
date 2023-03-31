@@ -25,6 +25,13 @@
     <string name="words_successfully_added">Слова успешно добавлены!</string>
     <string name="i_am_player_with_name">Я - %s!</string>
     <string name="are_you_sure_you_want_to_go_out">Вы точно хотите выйти?</string>
+    <string name="eloquence">Красноречие</string>
+    <string name="conciseness">Лаконичность</string>
+    <string name="artistry">Артистичность</string>
+    <string name="here_goes">Поехали!</string>
+    <string name="explain_using_sounds_and_words">Объясните, используя звуки и слова</string>
+    <string name="explain_using_only_one_word">Объясните, используя только одно слово</string>
+    <string name="explain_using_gestures_and_facial_expressions">Объясните, используя жесты и мимику</string>
 
     <string-array name="give_the_device_to_specified_player">
         <item>Передайте устройство игроку\n с именем\u0020</item>

@@ -17,5 +17,11 @@ sealed interface GameStep {
 
     data class FinishPlayerPreparingStep(val teamName: String, val playerName: String) : GameStep
 
-    object StartGame : GameStep
+    sealed interface StartGameRoundStep : GameStep {
+        object First : StartGameRoundStep
+        object Second : StartGameRoundStep
+        object Third : StartGameRoundStep
+    }
+
+    object StartPlayerMoveStep : GameStep
 }

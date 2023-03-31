@@ -105,9 +105,13 @@ class GameManager @Inject constructor() {
             currentPlayer = nextPlayer
             logEvents("Подготовка игрока с именем ${nextPlayer.name} из команды ${nextTeam.name}")
         } else {
-            currentStep = GameStep.StartGame
+            currentStep = GameStep.StartGameRoundStep.First
             logEvents("Начало игры")
         }
+    }
+
+    fun startPlayerMove() {
+        // TODO("HAT-37")
     }
 
     fun cancelPreparing() {

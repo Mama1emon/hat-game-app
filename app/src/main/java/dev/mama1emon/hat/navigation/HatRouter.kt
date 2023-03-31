@@ -65,10 +65,10 @@ object HatRouter {
                         R.string.are_you_sure_you_want_to_go_out,
                         Toast.LENGTH_LONG
                     ).show()
-                    true
+                    false
                 } else {
                     gameManager.cancelPreparing()
-                    false
+                    true
                 }
             }
             GameStep.StartGame -> {

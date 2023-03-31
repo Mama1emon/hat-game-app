@@ -23,7 +23,7 @@ import dev.mama1emon.hat.ds.theme.*
  * @author Andrew Khokhlov on 21/03/2023
  */
 @Composable
-fun AnnouncementScreen(
+fun AnnouncementComponent(
     title: String,
     @DrawableRes imageResId: Int,
     description: AnnotatedString,

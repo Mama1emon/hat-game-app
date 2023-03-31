@@ -69,6 +69,27 @@ sealed class Screens(
         }
     }
 
+    object PlayerMoveAnnouncement : Screens(
+        route = "player_move_announcement",
+        args = listOf(
+            navArgument(name = TEAM_NAME_KEY) {
+                type = NavType.StringType
+                nullable = false
+            },
+            navArgument(name = PLAYER_NAME_KEY) {
+                type = NavType.StringType
+                nullable = false
+            }
+        )
+    ) {
+        fun route(teamName: String, playerName: String): String {
+            return Route()
+                .addValue(key = TEAM_NAME_KEY, value = teamName)
+                .addValue(key = PLAYER_NAME_KEY, value = playerName)
+                .destination()
+        }
+    }
+
     companion object {
         const val PLAYER_KEY = "PLAYER_KEY"
         const val PLAYER_NAME_KEY = "PLAYER_NAME_KEY"

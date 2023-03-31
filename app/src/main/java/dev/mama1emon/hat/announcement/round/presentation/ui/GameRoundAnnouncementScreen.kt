@@ -5,7 +5,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import dev.mama1emon.hat.LocalGameManager
 import dev.mama1emon.hat.R
-import dev.mama1emon.hat.announcement.presentation.ui.AnnouncementScreen
+import dev.mama1emon.hat.announcement.presentation.ui.AnnouncementComponent
 import dev.mama1emon.hat.game.GameStep
 
 /**
@@ -15,7 +15,7 @@ import dev.mama1emon.hat.game.GameStep
 fun GameRoundAnnouncementScreen(round: GameStep.StartGameRoundStep) {
     val gameManager = LocalGameManager.current
 
-    AnnouncementScreen(
+    AnnouncementComponent(
         title = stringResource(
             id = when (round) {
                 GameStep.StartGameRoundStep.First -> R.string.eloquence

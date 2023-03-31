@@ -33,9 +33,14 @@
     <string name="explain_using_only_one_word">Объясните, используя только одно слово</string>
     <string name="explain_using_gestures_and_facial_expressions">Объясните, используя жесты и мимику</string>
 
-    <string-array name="give_the_device_to_specified_player">
+    <string-array name="give_the_device_to_specified_player_for_enter_words">
         <item>Передайте устройство игроку\n с именем\u0020</item>
         <item>\u0020из команды\u0020</item>
         <item>\u0020для ввода слов</item>
+    </string-array>
+
+    <string-array name="give_the_device_to_specified_player_for_guessing_words">
+        <item>Передайте устройство игроку\n с именем\u0020</item>
+        <item>\u0020для загадывания слов</item>
     </string-array>
 </resources>

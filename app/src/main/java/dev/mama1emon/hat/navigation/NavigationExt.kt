@@ -16,7 +16,9 @@ import dev.mama1emon.hat.LocalGameManager
 import dev.mama1emon.hat.R
 import dev.mama1emon.hat.addteam.presentation.ui.AddTeamsScreen
 import dev.mama1emon.hat.addteam.presentation.viewmodels.AddTeamsViewModel
-import dev.mama1emon.hat.announcement.presentation.ui.AnnouncementScreen
+import dev.mama1emon.hat.announcement.move.presentation.ui.PlayerMoveAnnouncementScreen
+import dev.mama1emon.hat.announcement.preparing.presentation.ui.PlayerPreparingAnnouncementScreen
+import dev.mama1emon.hat.announcement.presentation.ui.AnnouncementComponent
 import dev.mama1emon.hat.announcement.round.presentation.ui.GameRoundAnnouncementScreen
 import dev.mama1emon.hat.ds.theme.CitrusZest
 import dev.mama1emon.hat.enterwords.presentation.ui.EnterWordsScreen
@@ -45,28 +47,9 @@ fun NavGraphBuilder.hatGraph() {
             route = PlayerPreparingAnnouncement.value(),
             arguments = PlayerPreparingAnnouncement.arguments
         ) { entry ->
-            val playerName = entry.getString(Screens.PLAYER_NAME_KEY)
-
-            val gameManager = LocalGameManager.current
-            AnnouncementScreen(
-                title = stringResource(id = R.string.attention),
-                imageResId = R.drawable.ill_bell_alarm,
-                description = buildAnnotatedString {
-                    val strings = stringArrayResource(
-                        id = R.array.give_the_device_to_specified_player
-                    )
-                    append(text = requireNotNull(value = strings.getOrNull(index = 0)))
-                    withStyle(style = SpanStyle(CitrusZest)) {
-                        append(text = playerName)
-                    }
-                    append(text = requireNotNull(value = strings.getOrNull(index = 1)))
-                    withStyle(style = SpanStyle(CitrusZest)) {
-                        append(text = entry.getString(Screens.TEAM_NAME_KEY))
-                    }
-                    append(text = requireNotNull(value = strings.getOrNull(index = 2)))
-                },
-                buttonText = stringResource(id = R.string.i_am_player_with_name, playerName),
-                onButtonClick = gameManager::startPlayerPreparing
+            PlayerPreparingAnnouncementScreen(
+                teamName = entry.getString(Screens.TEAM_NAME_KEY),
+                playerName = entry.getString(Screens.PLAYER_NAME_KEY)
             )
         }
 
@@ -85,6 +68,13 @@ fun NavGraphBuilder.hatGraph() {
                     it.getString(Screens.GAME_ROUND_KEY),
                     GameStep.StartGameRoundStep::class.java
                 )
+            )
+        }
+
+        composable(route = PlayerMoveAnnouncement.value()) {
+            PlayerMoveAnnouncementScreen(
+                teamName = it.getString(Screens.TEAM_NAME_KEY),
+                playerName = it.getString(Screens.PLAYER_NAME_KEY)
             )
         }
     }

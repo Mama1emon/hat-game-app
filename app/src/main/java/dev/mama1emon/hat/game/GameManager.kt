@@ -114,6 +114,10 @@ class GameManager @Inject constructor() {
         // TODO("HAT-37")
     }
 
+    fun play() {
+        // TODO("HAT-37")
+    }
+
     fun cancelPreparing() {
         currentStep = GameStep.Greeting
         logEvents("Отмена подготовки")

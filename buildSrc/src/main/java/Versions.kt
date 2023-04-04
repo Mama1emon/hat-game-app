@@ -7,4 +7,5 @@ object Versions {
     const val hiltNavigation = "1.0.0"
     const val kotlin = "1.7.0"
     const val navigation = "2.5.2"
+    const val twyper = "0.0.4"
 }

@@ -13,4 +13,5 @@ object Deps {
     val kotlin by lazy { "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Versions.kotlin}" }
     val materialCompose by lazy { "androidx.compose.material:material:${Versions.compose}" }
     val navigation by lazy { "androidx.navigation:navigation-compose:${Versions.navigation}" }
+    val twyper by lazy { "com.github.theapache64:twyper:${Versions.twyper}" }
 }

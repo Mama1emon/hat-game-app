@@ -1,10 +1,5 @@
 package dev.mama1emon.hat.navigation
 
-import androidx.compose.ui.res.stringArrayResource
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.withStyle
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraphBuilder
@@ -12,19 +7,16 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.google.gson.Gson
 import dev.mama1emon.hat.LocalActivityViewModelStoreOwner
-import dev.mama1emon.hat.LocalGameManager
-import dev.mama1emon.hat.R
 import dev.mama1emon.hat.addteam.presentation.ui.AddTeamsScreen
 import dev.mama1emon.hat.addteam.presentation.viewmodels.AddTeamsViewModel
-import dev.mama1emon.hat.announcement.move.presentation.ui.PlayerMoveAnnouncementScreen
-import dev.mama1emon.hat.announcement.preparing.presentation.ui.PlayerPreparingAnnouncementScreen
-import dev.mama1emon.hat.announcement.presentation.ui.AnnouncementComponent
-import dev.mama1emon.hat.announcement.round.presentation.ui.GameRoundAnnouncementScreen
-import dev.mama1emon.hat.ds.theme.CitrusZest
-import dev.mama1emon.hat.enterwords.presentation.ui.EnterWordsScreen
 import dev.mama1emon.hat.enterwords.presentation.viewmodels.EnterWordsViewModel
+import dev.mama1emon.hat.features.announcement.move.presentation.ui.PlayerMoveAnnouncementScreen
+import dev.mama1emon.hat.features.announcement.preparing.presentation.ui.PlayerPreparingAnnouncementScreen
+import dev.mama1emon.hat.features.announcement.round.presentation.ui.GameRoundAnnouncementScreen
+import dev.mama1emon.hat.features.enterwords.presentation.ui.EnterWordsScreen
+import dev.mama1emon.hat.features.game.presentation.state.GameStateHolder
+import dev.mama1emon.hat.features.game.presentation.ui.GameScreen
 import dev.mama1emon.hat.game.GameStep
-import dev.mama1emon.hat.greeting.presentation.ui.GreetingScreen
 import dev.mama1emon.hat.navigation.Screens.*
 
 const val HAT_GRAPH_NAME = "hat"

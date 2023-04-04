@@ -14,8 +14,11 @@ val GoldenBrown = Color(0xFFEAC117)
 val GoldenOrange = Color(0xFFD4A017)
 val BlackEel = Color(0xFF49423D)
 val BlueZodiac = Color(0xFF181D47)
+val SmokyTopaz = Color(0xFF9F3547)
+val Barney = Color(0xFFA42AA4)
 
 val GoldenLinearGradient = listOf(GoldenBrown, GoldenOrange)
+val CrimsonLinearGradient = listOf(SmokyTopaz, Barney)
 val LightInDarkRadialGradient = listOf(
     QuillTip,
     Color(0xFF2D2C56),

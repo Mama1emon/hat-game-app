@@ -62,4 +62,5 @@ dependencies {
     implementation(Deps.kotlin)
     implementation(Deps.materialCompose)
     implementation(Deps.navigation)
+    implementation(Deps.twyper)
 }

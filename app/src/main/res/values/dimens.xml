@@ -11,6 +11,7 @@
     <dimen name="padding18">18dp</dimen>
     <dimen name="padding20">20dp</dimen>
     <dimen name="padding24">24dp</dimen>
+    <dimen name="padding30">30dp</dimen>
     <dimen name="padding32">32dp</dimen>
     <dimen name="padding36">36dp</dimen>
     <dimen name="padding40">40dp</dimen>
@@ -20,6 +21,7 @@
     <dimen name="padding56">56dp</dimen>
     <dimen name="padding65">65dp</dimen>
     <dimen name="padding70">70dp</dimen>
+    <dimen name="padding100">100dp</dimen>
 
     <dimen name="size1">1dp</dimen>
     <dimen name="size6">6dp</dimen>
@@ -39,4 +41,6 @@
 
     <dimen name="radius8">8dp</dimen>
     <dimen name="radius16">16dp</dimen>
+
+    <dimen name="elevation6">6dp</dimen>
 </resources>
